@@ -56,4 +56,17 @@ public class AnalyticsService {
             ))
             .toList();
     }
+
+    public AccuracyResponse getAccuracy(Long userId) {
+        List<EventLog> events = eventLogRepository.findByUserId(userId);
+
+        long totalCount = events.size();
+        long correctCount = events.stream()
+            .filter(event -> Boolean.TRUE.equals(event.getCorrect()))
+            .count();
+
+        double accuracy = totalCount == 0 ? 0.0 : (double) correctCount / totalCount;
+
+        return new AccuracyResponse(userId, totalCount, correctCount, accuracy);
+    }
 }
