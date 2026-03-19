@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper-deployment
+  namespace: lgcns
+
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+
+    spec:
+      # docker container 
+      containers:
+        - name: zookeeper-container
+          # 혹, 실행중인 컨테이너를 이미지로 만들고 ecr 배포할 경우 ecr repo 주소사용 가능
+          image: wurstmeister/zookeeper
+          ports:
+          - containerPort: 2181
+
+---
+# core service setting
+# core group : pod, service, ConfigMap, Secret, namespace
+apiVersion: v1 
+kind: Service
+metadata:
+  name: zookeeper-service
+  namespace: lgcns
+spec:
+  type: ClusterIP
+  ports:
+  - port: 2181
+    targetPort: 2181
+  selector:
+    app: zookeeper
