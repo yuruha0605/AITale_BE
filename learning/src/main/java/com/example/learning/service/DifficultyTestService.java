@@ -60,12 +60,13 @@ public class DifficultyTestService {
 
         // 난이도 판정
         Difficulty assignedDifficulty;
-        if (correctCount <= 3)
-            assignedDifficulty = Difficulty.LOW;
-        else if (correctCount <= 7)
-            assignedDifficulty = Difficulty.MEDIUM;
-        else
-            assignedDifficulty = Difficulty.HIGH;
+        if (correctCount <= 3) {
+        assignedDifficulty = Difficulty.LOW;
+        } else if (correctCount <= 7) {
+        assignedDifficulty = Difficulty.MEDIUM;
+        } else {
+        assignedDifficulty = Difficulty.HIGH;
+        }
 
         // // FeignClient로 user-service 호출
         // Map<String, String> body = Map.of("assignedDifficulty", assignedDifficulty.name());

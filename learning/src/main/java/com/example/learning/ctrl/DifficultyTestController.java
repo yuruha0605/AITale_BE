@@ -29,9 +29,9 @@ public class DifficultyTestController {
         return service.getQuestions(ageGroup, page);
     }
 
-    // Difficulty enum -> String 반환
+    
     @PostMapping("/submit")
     public String submitTest(@RequestBody AnswerDTO request) {
-        return service.submitTest(request.getUserId(), request.getAnswers()).name();
+        return service.submitTest(request.getUserId(), request.getAnswers()).name(); // Difficulty enum -> String 반환
     }
 }

@@ -9,7 +9,6 @@ public interface DifficultyTestQuestionRepository
         extends JpaRepository<DifficultyTestQuestionEntity, Long> {
 
     List<DifficultyTestQuestionEntity> findByTargetAgeGroupAndPageNumberOrderById(
-
             Integer targetAgeGroup, Integer pageNumber);
 
 }
