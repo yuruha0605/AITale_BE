@@ -25,21 +25,17 @@ public class JwtAuthFilter implements GlobalFilter {
     private String secret;
     private Key key;
 
-
-
     // WHITE LIST
-    private static final List<String> WHITE_LIST_PATHS =
-            List.of("/users/signIn", "/health/alive", "/product/list");
-
-
+    private static final List<String> WHITE_LIST_PATHS = List.of(
+            "/users/signIn",
+            "/health/alive",
+            "/product/list");
 
     @PostConstruct
     private void init() {
         System.out.println(">>>> [JwtAuthFilter] init() called - jwt secret : " + secret);
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
-
-
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -58,7 +54,6 @@ public class JwtAuthFilter implements GlobalFilter {
             return chain.filter(exchange);
         }
 
-
         try {
             System.out.println(">>>> [JwtAuthFilter] Authorization : " + bearerToken);
             if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
@@ -68,8 +63,7 @@ public class JwtAuthFilter implements GlobalFilter {
             String token = bearerToken.substring(7);
             System.out.println(">>>> [JwtAuthFilter] Token : " + token);
 
-            Claims claims =
-                    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             String email = claims.getSubject();
             System.out.println(">>>> [JwtAuthFilter] claims get email : " + email);
 
