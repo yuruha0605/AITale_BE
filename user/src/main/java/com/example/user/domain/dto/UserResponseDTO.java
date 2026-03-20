@@ -1,0 +1,24 @@
+package com.example.user.domain.dto;
+
+import jakarta.persistence.Column;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Builder
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserResponseDTO {
+
+    private String email  ;
+    private String password ;
+    private int age;
+    private String assignedDifficulty; // 학습난이도
+
+}
