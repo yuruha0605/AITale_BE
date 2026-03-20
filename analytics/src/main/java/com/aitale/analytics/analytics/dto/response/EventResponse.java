@@ -5,6 +5,6 @@ import com.aitale.analytics.analytics.domain.EventType;
 import java.time.LocalDateTime;
 
 public record EventResponse(Long id, Long userId, EventType eventType, Long targetId,
-        Boolean correct, Integer score, LocalDateTime createdAt) {
+                            Boolean correct, Integer score, LocalDateTime createdAt) {
 
 }
