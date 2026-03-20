@@ -1,0 +1,157 @@
+version: "3.9"
+
+networks:
+  msa-network:
+    driver: bridge
+
+services:
+  # Eureka Service Registry - 먼저 기동
+  eureka:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      SERVER_PORT: "8761"
+      SPRING_APPLICATION_NAME: eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+    networks:
+      - msa-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # API Gateway (향후 추가)
+  # api-gateway:
+  #   build:
+  #     context: ../apigateway
+  #     dockerfile: Dockerfile
+  #   container_name: api-gateway
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     SERVER_PORT: "8080"
+  #     SPRING_APPLICATION_NAME: api-gateway
+  #     EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka
+  #   depends_on:
+  #     eureka:
+  #       condition: service_healthy
+  #   networks:
+  #     - msa-network
+  #   restart: unless-stopped
+
+  # 마이크로서비스들 (향후 추가)
+  # user-service:
+  #   build:
+  #     context: ../user
+  #     dockerfile: Dockerfile
+  #   container_name: user-service
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     SERVER_PORT: "8081"
+  #     SPRING_APPLICATION_NAME: user-service
+  #     EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka
+  #   depends_on:
+  #     eureka:
+  #       condition: service_healthy
+  #   networks:
+  #     - msa-network
+  #   restart: unless-stopped
+
+  # story-service:
+  #   build:
+  #     context: ../story
+  #     dockerfile: Dockerfile
+  #   container_name: story-service
+  #   ports:
+  #     - "8082:8082"
+  #   environment:
+  #     SERVER_PORT: "8082"
+  #     SPRING_APPLICATION_NAME: story-service
+  #     EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka
+  #   depends_on:
+  #     eureka:
+  #       condition: service_healthy
+  #   networks:
+  #     - msa-network
+  #   restart: unless-stopped
+
+  # analytics-service:
+  #   build:
+  #     context: ../analytics
+  #     dockerfile: Dockerfile
+  #   container_name: analytics-service
+  #   ports:
+  #     - "8083:8083"
+  #   environment:
+  #     SERVER_PORT: "8083"
+  #     SPRING_APPLICATION_NAME: analytics-service
+  #     EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka
+  #   depends_on:
+  #     eureka:
+  #       condition: service_healthy
+  #   networks:
+  #     - msa-network
+  #   restart: unless-stopped
+
+  # recommendation-service:
+  #   build:
+  #     context: ../recommendation
+  #     dockerfile: Dockerfile
+  #   container_name: recommendation-service
+  #   ports:
+  #     - "8084:8084"
+  #   environment:
+  #     SERVER_PORT: "8084"
+  #     SPRING_APPLICATION_NAME: recommendation-service
+  #     EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka
+  #   depends_on:
+  #     eureka:
+  #       condition: service_healthy
+  #   networks:
+  #     - msa-network
+  #   restart: unless-stopped
+
+  # gamification-service:
+  #   build:
+  #     context: ../gamification
+  #     dockerfile: Dockerfile
+  #   container_name: gamification-service
+  #   ports:
+  #     - "8085:8085"
+  #   environment:
+  #     SERVER_PORT: "8085"
+  #     SPRING_APPLICATION_NAME: gamification-service
+  #     EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka
+  #   depends_on:
+  #     eureka:
+  #       condition: service_healthy
+  #   networks:
+  #     - msa-network
+  #   restart: unless-stopped
+
+  # learning-service:
+  #   build:
+  #     context: ../learning
+  #     dockerfile: Dockerfile
+  #   container_name: learning-service
+  #   ports:
+  #     - "8086:8086"
+  #   environment:
+  #     SERVER_PORT: "8086"
+  #     SPRING_APPLICATION_NAME: learning-service
+  #     EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka
+  #   depends_on:
+  #     eureka:
+  #       condition: service_healthy
+  #   networks:
+  #     - msa-network
+  #   restart: unless-stopped
