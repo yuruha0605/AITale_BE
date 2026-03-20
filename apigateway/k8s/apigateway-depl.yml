@@ -23,7 +23,7 @@ spec:
       containers:
         - name: apigateway-container
           # ecr 경로
-          image: 310095858382.dkr.ecr.ap-northeast-2.amazonaws.com/apigateway:latest
+          image: 811221506617.dkr.ecr.ap-northeast-2.amazonaws.com/apigateway:latest
           ports:
           - containerPort: 8080
           
