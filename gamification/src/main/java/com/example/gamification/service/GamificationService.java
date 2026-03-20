@@ -72,7 +72,6 @@ public class GamificationService {
         }
         return 10;
     }
-<<<<<<< HEAD
 
     // 사용자 상태 조회 로직
     public UserExpStatus getUserStatus(Long userId) {
@@ -86,6 +85,3 @@ public class GamificationService {
     }
 }
 
-=======
-}
->>>>>>> 79eecd29d67268b1cfb7d8ae681127c961eaf057
