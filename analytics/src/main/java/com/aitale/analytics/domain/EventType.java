@@ -1,4 +1,4 @@
-package com.aitale.analytics.analytics.domain;
+package com.aitale.analytics.domain;
 
 public enum EventType {
     QUIZ_SOLVED, STORY_VIEWED

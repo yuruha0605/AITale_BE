@@ -1,4 +1,4 @@
-package com.aitale.analytics.analytics.domain;
+package com.aitale.analytics.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

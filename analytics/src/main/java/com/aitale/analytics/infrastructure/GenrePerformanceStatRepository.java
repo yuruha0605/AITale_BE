@@ -1,6 +1,6 @@
-package com.aitale.analytics.analytics.infrastructure;
+package com.aitale.analytics.infrastructure;
 
-import com.aitale.analytics.analytics.domain.GenrePerformanceStat;
+import com.aitale.analytics.domain.GenrePerformanceStat;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

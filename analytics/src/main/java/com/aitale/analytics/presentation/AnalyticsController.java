@@ -1,8 +1,8 @@
-package com.aitale.analytics.analytics.presentation;
+package com.aitale.analytics.presentation;
 
-import com.aitale.analytics.analytics.application.AnalyticsService;
-import com.aitale.analytics.analytics.dto.response.AccuracyResponse;
-import com.aitale.analytics.analytics.dto.response.EventResponse;
+import com.aitale.analytics.application.AnalyticsService;
+import com.aitale.analytics.dto.response.AccuracyResponse;
+import com.aitale.analytics.dto.response.EventResponse;
 import com.aitale.analytics.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
