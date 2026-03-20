@@ -1,10 +1,13 @@
 package com.aitale.analytics.analytics.application;
 
 import com.aitale.analytics.analytics.domain.DailyScoreStat;
+import com.aitale.analytics.analytics.domain.EventLog;
+import com.aitale.analytics.analytics.domain.EventType;
 import com.aitale.analytics.analytics.domain.GenrePerformanceStat;
 import com.aitale.analytics.analytics.domain.UserGrowthSnapshot;
 import com.aitale.analytics.analytics.dto.request.StudyResultCreateRequest;
 import com.aitale.analytics.analytics.infrastructure.DailyScoreStatRepository;
+import com.aitale.analytics.analytics.infrastructure.EventLogRepository;
 import com.aitale.analytics.analytics.infrastructure.GenrePerformanceStatRepository;
 import com.aitale.analytics.analytics.infrastructure.UserGrowthSnapshotRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +25,26 @@ public class AnalyticsCommandService {
     private final DailyScoreStatRepository dailyScoreStatRepository;
     private final UserGrowthSnapshotRepository userGrowthSnapshotRepository;
     private final GenrePerformanceStatRepository genrePerformanceStatRepository;
+    private final EventLogRepository eventLogRepository;
 
     public void saveStudyResult(StudyResultCreateRequest request) {
+        saveEventLog(request);
         updateDailyScoreStat(request);
         updateUserGrowthSnapshot(request);
         updateGenrePerformanceStat(request);
+    }
+
+    private void saveEventLog(StudyResultCreateRequest request) {
+        EventLog eventLog = EventLog.builder()
+            .userId(request.userId())
+            .eventType(EventType.QUIZ_SOLVED)
+            .targetId(request.storyId())
+            .correct(request.wrongCount() == 0)
+            .score(request.totalScore())
+            .createdAt(request.solvedAt())
+            .build();
+
+        eventLogRepository.save(eventLog);
     }
 
     private void updateDailyScoreStat(StudyResultCreateRequest request) {
