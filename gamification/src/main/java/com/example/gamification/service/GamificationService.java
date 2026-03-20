@@ -21,9 +21,7 @@ public class GamificationService {
     public void processReward(RewardRequest request) {
         // 1. 사용자 경험치 상태 업데이트
         UserExpStatus status = statusRepository.findByUserId(request.getUserId())
-                .orElseGet(() -> statusRepository.save(
-                        new UserExpStatus(request.getUserId())
-                ));
+                .orElseGet(() -> statusRepository.save(new UserExpStatus(request.getUserId())));
 
         int amount = calculateExp(request.getScoreGrade());
         status.addExp(amount);
@@ -38,20 +36,17 @@ public class GamificationService {
     }
 
     private void saveExpLog(RewardRequest request, int amount) {
-        ExpLog log = ExpLog.builder()
-                .userId(request.getUserId())
-                .amount(amount)
-                .sourceType(request.getSourceType())
-                .description(request.getSourceType() + " 보상 획득")
+        ExpLog log = ExpLog.builder().userId(request.getUserId()).amount(amount)
+                .sourceType(request.getSourceType()).description(request.getSourceType() + " 보상 획득")
                 .build();
         expLogRepository.save(log);
     }
 
     private void checkAndGiveBadge(Long userId, String badgeType) {
         badgeRepository.findByType(badgeType).ifPresent(badge -> {
-            boolean alreadyHas = userBadgeRepository
-                    .existsByUserIdAndBadgeId(userId, badge.getId());
-            
+            boolean alreadyHas =
+                    userBadgeRepository.existsByUserIdAndBadgeId(userId, badge.getId());
+
             if (!alreadyHas) {
                 userBadgeRepository.save(new UserBadge(userId, badge.getId()));
             }

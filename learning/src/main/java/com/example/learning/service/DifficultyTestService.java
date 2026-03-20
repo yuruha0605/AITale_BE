@@ -26,33 +26,23 @@ public class DifficultyTestService {
 
     // 문제 조회
     public List<QuestionDTO> getQuestions(Integer ageGroup, Integer page) {
-        return questionRepository
-                .findByTargetAgeGroupAndPageNumberOrderById(ageGroup, page)
-                .stream()
-                .map(q -> {
+        return questionRepository.findByTargetAgeGroupAndPageNumberOrderById(ageGroup, page)
+                .stream().map(q -> {
                     List<String> options;
                     try {
-                        options = objectMapper.readValue(
-                                q.getOptions(),
-                                new TypeReference<List<String>>() {}
-                        );
+                        options = objectMapper.readValue(q.getOptions(),
+                                new TypeReference<List<String>>() {});
                     } catch (Exception e) {
                         throw new RuntimeException("options parsing error", e);
                     }
-                    return QuestionDTO.builder()
-                            .id(q.getId())
-                            .question(q.getQuestion())
-                            .options(options)
-                            .build();
-                })
-                .toList();
+                    return QuestionDTO.builder().id(q.getId()).question(q.getQuestion())
+                            .options(options).build();
+                }).toList();
     }
 
     // 제출
     public Difficulty submitTest(Long userId, List<AnswerDTO> answers) {
-        List<Long> ids = answers.stream()
-                .map(AnswerDTO::getQuestionId)
-                .toList();
+        List<Long> ids = answers.stream().map(AnswerDTO::getQuestionId).toList();
 
         List<DifficultyTestQuestionEntity> questions = questionRepository.findAllById(ids);
 
@@ -70,9 +60,12 @@ public class DifficultyTestService {
 
         // 난이도 판정
         Difficulty assignedDifficulty;
-        if (correctCount <= 3) assignedDifficulty = Difficulty.LOW;
-        else if (correctCount <= 7) assignedDifficulty = Difficulty.MEDIUM;
-        else assignedDifficulty = Difficulty.HIGH;
+        if (correctCount <= 3)
+            assignedDifficulty = Difficulty.LOW;
+        else if (correctCount <= 7)
+            assignedDifficulty = Difficulty.MEDIUM;
+        else
+            assignedDifficulty = Difficulty.HIGH;
 
         // // FeignClient로 user-service 호출
         // Map<String, String> body = Map.of("assignedDifficulty", assignedDifficulty.name());

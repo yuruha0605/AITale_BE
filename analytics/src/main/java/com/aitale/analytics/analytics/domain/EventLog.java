@@ -32,8 +32,8 @@ public class EventLog {
     private LocalDateTime createdAt;
 
     @Builder
-    public EventLog(Long userId, EventType eventType, Long targetId,
-        Boolean correct, Integer score, LocalDateTime createdAt) {
+    public EventLog(Long userId, EventType eventType, Long targetId, Boolean correct, Integer score,
+            LocalDateTime createdAt) {
         this.userId = userId;
         this.eventType = eventType;
         this.targetId = targetId;
