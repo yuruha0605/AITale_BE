@@ -16,7 +16,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Table(name = "difficulty_test_question")
 public class DifficultyTestQuestionEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "test_question_id")

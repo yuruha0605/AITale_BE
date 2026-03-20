@@ -15,11 +15,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AnswerDTO {
-    
+
     private Long userId;
     private Long questionId;
     private Integer answer;
-    
+
     @Builder.Default
     private List<AnswerDTO> answers = new ArrayList<>();
 

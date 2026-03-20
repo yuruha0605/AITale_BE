@@ -21,8 +21,7 @@ public class ExpLog {
     private LocalDateTime earnedAt;
 
     @Builder
-    public ExpLog(Long userId, Integer amount, 
-                  String sourceType, String description) {
+    public ExpLog(Long userId, Integer amount, String sourceType, String description) {
         this.userId = userId;
         this.amount = amount;
         this.sourceType = sourceType;
