@@ -1,0 +1,48 @@
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/learning?useSSL=false&serverTimezone=UTC
+    username: root       
+    password: 123456789 
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # 테이블 없으면 자동 생성
+    show-sql: true
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+server:
+  port: 8080
+
+  # Swagger는 자동 활성화됨
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true
+
+# Eureka 비활성화 (단독 실행용)
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+ai:
+  service:
+    url: localhost:9000
+
+
+ 
+# # Config Server AWS version
+# spring:
+#   application:
+#     name: learning-service
+#   config:
+#     import: "optional:configserver:http://config-service"
+
+#   cloud:
+#     config:
+#       fail-fast: true
