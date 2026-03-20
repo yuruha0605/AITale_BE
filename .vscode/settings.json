@@ -1,17 +1,4 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "automatic",
-
-    // 1. 저장 시 자동으로 포맷팅(정렬) 수행
-    "editor.formatOnSave": true,
-
-    // 2. 자바 파일의 기본 포맷터를 Red Hat Java로 지정
-    "[java]": {
-        "editor.defaultFormatter": "redhat.java"
-    },
-
-    // 3. Google Java Style 가이드 URL 연결 (또는 로컬 xml 파일 경로)
-    "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
-    "java.format.settings.profile": "GoogleStyle",
-    "java.checkstyle.configuration": ".vscode/google_checks.xml"
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
