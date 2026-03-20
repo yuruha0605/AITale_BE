@@ -1,6 +1,6 @@
-package com.aitale.analytics.analytics.infrastructure;
+package com.aitale.analytics.infrastructure;
 
-import com.aitale.analytics.analytics.domain.DailyScoreStat;
+import com.aitale.analytics.domain.DailyScoreStat;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
