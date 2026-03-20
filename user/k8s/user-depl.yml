@@ -36,7 +36,7 @@ spec:
               cpu: "0.5"
               memory: "250Mi"
 
-          # secret 작성 후 외부 환경 변수를 이용해서 Pod 실행 시 주입할 예정  
+          # secret 작성 후 외부 환경 변수를 이용해서 Pod 실행 시 주입할 예정
           env:
           - name: DB_HOST
             valueFrom:
