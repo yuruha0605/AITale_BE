@@ -1,21 +1,24 @@
-package com.aitale.analytics.analytics.application;
+package com.aitale.analytics.application;
 
-import com.aitale.analytics.analytics.domain.DailyScoreStat;
-import com.aitale.analytics.analytics.domain.EventLog;
-import com.aitale.analytics.analytics.domain.EventType;
-import com.aitale.analytics.analytics.domain.GenrePerformanceStat;
-import com.aitale.analytics.analytics.domain.UserGrowthSnapshot;
-import com.aitale.analytics.analytics.dto.request.StudyResultCreateRequest;
-import com.aitale.analytics.analytics.infrastructure.DailyScoreStatRepository;
-import com.aitale.analytics.analytics.infrastructure.EventLogRepository;
-import com.aitale.analytics.analytics.infrastructure.GenrePerformanceStatRepository;
-import com.aitale.analytics.analytics.infrastructure.UserGrowthSnapshotRepository;
+import com.aitale.analytics.domain.DailyScoreStat;
+import com.aitale.analytics.domain.EventLog;
+import com.aitale.analytics.domain.EventType;
+import com.aitale.analytics.domain.GenrePerformanceStat;
+import com.aitale.analytics.domain.UserGrowthSnapshot;
+import com.aitale.analytics.dto.request.StudyResultCreateRequest;
+import com.aitale.analytics.exception.AnalyticsErrorCode;
+import com.aitale.analytics.exception.AnalyticsException;
+import com.aitale.analytics.infrastructure.DailyScoreStatRepository;
+import com.aitale.analytics.infrastructure.EventLogRepository;
+import com.aitale.analytics.infrastructure.GenrePerformanceStatRepository;
+import com.aitale.analytics.infrastructure.UserGrowthSnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +31,30 @@ public class AnalyticsCommandService {
     private final EventLogRepository eventLogRepository;
 
     public void saveStudyResult(StudyResultCreateRequest request) {
+        validateRequest(request);
+        validateDuplicate(request.studyResultId());
+
         saveEventLog(request);
         updateDailyScoreStat(request);
         updateUserGrowthSnapshot(request);
         updateGenrePerformanceStat(request);
     }
 
+    private void validateRequest(StudyResultCreateRequest request) {
+        if (request.hasInvalidCounts()) {
+            throw new AnalyticsException(AnalyticsErrorCode.INVALID_STUDY_RESULT);
+        }
+    }
+
+    private void validateDuplicate(String studyResultId) {
+        if (eventLogRepository.existsByStudyResultId(studyResultId)) {
+            throw new AnalyticsException(AnalyticsErrorCode.DUPLICATE_STUDY_RESULT);
+        }
+    }
+
     private void saveEventLog(StudyResultCreateRequest request) {
         EventLog eventLog = EventLog.builder()
+            .studyResultId(request.studyResultId())
             .userId(request.userId())
             .eventType(EventType.QUIZ_SOLVED)
             .targetId(request.storyId())
@@ -96,13 +115,16 @@ public class AnalyticsCommandService {
         LocalDate snapshotDate = request.solvedAt().toLocalDate();
         LocalDateTime now = LocalDateTime.now();
 
-        userGrowthSnapshotRepository.findTopByUserIdOrderBySnapshotDateDesc(request.userId())
+        int scoreDelta = request.totalScore();
+        int quizDelta = request.quizCount();
+        int correctDelta = request.correctCount();
+
+        userGrowthSnapshotRepository.findByUserIdAndSnapshotDate(request.userId(), snapshotDate)
             .ifPresentOrElse(
                 snapshot -> {
-                    int newTotalScore = snapshot.getTotalScore() + request.totalScore();
-                    int newTotalQuizCount = snapshot.getTotalQuizCount() + request.quizCount();
-                    int newTotalCorrectCount =
-                        snapshot.getTotalCorrectCount() + request.correctCount();
+                    int newTotalScore = snapshot.getTotalScore() + scoreDelta;
+                    int newTotalQuizCount = snapshot.getTotalQuizCount() + quizDelta;
+                    int newTotalCorrectCount = snapshot.getTotalCorrectCount() + correctDelta;
                     double newOverallCorrectRate = newTotalQuizCount == 0
                         ? 0.0
                         : (double) newTotalCorrectCount / newTotalQuizCount;
@@ -112,28 +134,62 @@ public class AnalyticsCommandService {
                         newTotalScore,
                         newTotalQuizCount,
                         newTotalCorrectCount,
-                        newOverallCorrectRate
+                        newOverallCorrectRate,
+                        now
                     );
                 },
-                () -> {
-                    double overallCorrectRate = request.quizCount() == 0
-                        ? 0.0
-                        : (double) request.correctCount() / request.quizCount();
-
-                    UserGrowthSnapshot snapshot = UserGrowthSnapshot.builder()
-                        .userId(request.userId())
-                        .snapshotDate(snapshotDate)
-                        .currentLevel(request.currentLevel())
-                        .totalScore(request.totalScore())
-                        .totalQuizCount(request.quizCount())
-                        .totalCorrectCount(request.correctCount())
-                        .overallCorrectRate(overallCorrectRate)
-                        .createdAt(now)
-                        .build();
-
-                    userGrowthSnapshotRepository.save(snapshot);
-                }
+                () -> createSnapshotFromPrevious(request, snapshotDate, now)
             );
+
+        List<UserGrowthSnapshot> futureSnapshots =
+            userGrowthSnapshotRepository.findByUserIdAndSnapshotDateGreaterThanOrderBySnapshotDateAsc(
+                request.userId(),
+                snapshotDate
+            );
+
+        for (UserGrowthSnapshot futureSnapshot : futureSnapshots) {
+            futureSnapshot.applyDelta(scoreDelta, quizDelta, correctDelta, now);
+        }
+    }
+
+    private void createSnapshotFromPrevious(
+        StudyResultCreateRequest request,
+        LocalDate snapshotDate,
+        LocalDateTime now
+    ) {
+        UserGrowthSnapshot previousSnapshot = userGrowthSnapshotRepository
+            .findTopByUserIdAndSnapshotDateLessThanOrderBySnapshotDateDesc(
+                request.userId(),
+                snapshotDate
+            )
+            .orElse(null);
+
+        int baseTotalScore = previousSnapshot == null ? 0 : previousSnapshot.getTotalScore();
+        int baseTotalQuizCount =
+            previousSnapshot == null ? 0 : previousSnapshot.getTotalQuizCount();
+        int baseTotalCorrectCount =
+            previousSnapshot == null ? 0 : previousSnapshot.getTotalCorrectCount();
+
+        int newTotalScore = baseTotalScore + request.totalScore();
+        int newTotalQuizCount = baseTotalQuizCount + request.quizCount();
+        int newTotalCorrectCount = baseTotalCorrectCount + request.correctCount();
+        double newOverallCorrectRate = newTotalQuizCount == 0
+            ? 0.0
+            : (double) newTotalCorrectCount / newTotalQuizCount;
+
+        UserGrowthSnapshot snapshot = UserGrowthSnapshot.builder()
+            .userId(request.userId())
+            .snapshotDate(snapshotDate)
+            .currentLevel(request.currentLevel())
+            .totalScore(newTotalScore)
+            .totalQuizCount(newTotalQuizCount)
+            .totalCorrectCount(newTotalCorrectCount)
+            .overallCorrectRate(newOverallCorrectRate)
+            .createdAt(now)
+            .updatedAt(now)
+            .build();
+
+        userGrowthSnapshotRepository.save(snapshot);
     }
 
     private void updateGenrePerformanceStat(StudyResultCreateRequest request) {
