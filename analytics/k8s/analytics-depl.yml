@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-deployment
+  namespace: lgcns
+
+spec:
+  # 자원공간의 낭비를 방지하고 관리의 편의성을 제공해주는 옵션!!!
+  revisionHistoryLimit: 2
+
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analytics
+
+  template:
+    metadata:
+      labels:
+        app: analytics
+
+    spec:
+      # docker container 
+      containers:
+        - name: analytics-container
+          # ecr 경로
+          image: 811221506617.dkr.ecr.ap-northeast-2.amazonaws.com/analytics-service:latest
+          ports:
+          - containerPort: 8080
+          resources:
+            # container가 사용할 수 있는 최대치의 Resource
+            limits:
+              cpu: "1"
+              memory: "500Mi"
+            # Container가 기동할 때 보장 받는 최소 Resource
+            requests:
+              cpu: "0.5"
+              memory: "250Mi"
+
+          # secret 작성 후 외부 환경 변수를 이용해서 Pod 실행 시 주입할 예정
+          env:
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: lgcns-app-secrets
+                key: DB_HOST
+
+          - name: DB_ADMIN
+            valueFrom:
+              secretKeyRef:
+                name: lgcns-app-secrets
+                key: DB_ADMIN
+
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: lgcns-app-secrets
+                key: DB_PASSWORD
+          
+          # Container 상태를 확인할 수 있는 설정들도 넣어줄 수 있다.
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 8080
+
+---
+# core service setting
+# core group : pod, service, ConfigMap, Secret, namespace
+apiVersion: v1
+kind: Service
+metadata:
+  name: analytics-service
+  namespace: lgcns
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: analytics
