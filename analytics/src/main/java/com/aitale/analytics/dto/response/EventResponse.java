@@ -1,6 +1,6 @@
-package com.aitale.analytics.analytics.dto.response;
+package com.aitale.analytics.dto.response;
 
-import com.aitale.analytics.analytics.domain.EventType;
+import com.aitale.analytics.domain.EventType;
 
 import java.time.LocalDateTime;
 
