@@ -1,0 +1,31 @@
+networks:
+  msa-network:
+    name: msa-network
+    driver: bridge
+
+services:
+  # Eureka Service Registry - 먼저 기동
+  eureka:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      SERVER_PORT: "8761"
+      SPRING_APPLICATION_NAME: eureka
+      CONFIG_SERVER_URL: http://host.docker.internal:8080
+      EUREKA_CLIENT_ENABLED: "true"
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+    networks:
+      - msa-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
