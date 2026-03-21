@@ -33,12 +33,27 @@ public class AiExplanationService {
                 try {
 
                         String prompt = """
-                                        초등학생이 이해할 수 있도록 문제의 정답을 설명해주세요.
+                                        너는 초등학생에게 독해 문제를 설명해주는 친절한 선생님이다.
 
-                                        문제: %s
-                                        사용자의 답: %s
-                                        정답: %s
-                                        """.formatted(question, userAnswer, correctAnswer);
+                                        다음 문제의 정답을 이해하기 쉽게 설명해줘.
+
+                                        [문제]
+                                        {question}
+
+                                        [학생이 고른 답]
+                                        {userAnswer}
+
+                                        [정답]
+                                        {correctAnswer}
+
+                                        다음 형식으로 설명해줘.
+
+                                        1. 왜 학생의 답이 틀렸는지 간단히 설명
+                                        2. 문제에서 중요한 단서가 무엇인지 설명
+                                        3. 정답이 되는 이유를 이야기하듯 설명
+
+                                        설명은 초등학생이 이해할 수 있도록 쉽고 친절하게 작성해줘.
+                                                """.formatted(question, userAnswer, correctAnswer);
 
                         Map<String, Object> body = new HashMap<>();
 
