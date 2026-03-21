@@ -27,6 +27,7 @@ public class AiExplanationService {
 
         public String generateExplanation(
                         String question,
+                        String options,
                         Integer userAnswer,
                         Integer correctAnswer) {
 
@@ -40,6 +41,9 @@ public class AiExplanationService {
                                         [문제]
                                         %s
 
+                                        [선택지]
+                                        %s
+
                                         [학생이 고른 답]
                                         %s
 
@@ -47,12 +51,14 @@ public class AiExplanationService {
                                         %s
 
                                         요구사항:
+                                        - 문제와 선택지에 있는 내용만 사용해서 설명한다.
+                                        - 선택지에 없는 내용은 만들지 않는다.
                                         - 인사말은 쓰지 않는다.
                                         - 번호나 목록 형식(1., 2., ** 등)을 사용하지 않는다.
                                         - 하나의 자연스러운 해설 문단으로 작성한다.
                                         - 학생이 고른 답이 왜 틀렸는지와 정답이 되는 이유를 함께 설명한다.
                                         - 초등학생이 이해할 수 있도록 쉽고 친절한 말로 3~4문장 정도로 작성한다.
-                                                """.formatted(question, userAnswer, correctAnswer);
+                                                """.formatted(question, options, userAnswer, correctAnswer);
 
                         Map<String, Object> body = new HashMap<>();
 

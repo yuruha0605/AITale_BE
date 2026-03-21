@@ -73,6 +73,7 @@ public class StoryQuizService {
 
                                 String explanation = aiExplanationService.generateExplanation(
                                                 q.getQuestion(),
+                                                q.getOptions(),
                                                 answer.getAnswer(),
                                                 q.getCorrectAnswer());
 
@@ -178,6 +179,7 @@ public class StoryQuizService {
 
                                 String explanation = aiExplanationService.generateExplanation(
                                                 q.getQuestion(),
+                                                q.getOptions(),
                                                 answer.getAnswer(),
                                                 q.getCorrectAnswer());
 
