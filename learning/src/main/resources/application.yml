@@ -18,7 +18,7 @@ spring:
   application:
     name: learning-service
   config:
-    import: "optional:configserver:http://config-service"
+    import: optional:configserver:http://config-service,optional:application-secret.yml
 
 server:
   port: 8080

@@ -1,5 +1,7 @@
 package com.example.learning.domain.dto;
 
+import java.util.List;
+
 import com.example.learning.domain.entity.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +21,6 @@ public class SubmitResponseDTO {
     private int totalScore;
     private boolean hasBonus; // 기본문제 다 맞춰서 보너스 문제 가능 여부
     private Difficulty nextDifficulty; // 보너스 문제 난이도
+
+    private List<WrongAnswerExplanationDTO> explanations;
 }
