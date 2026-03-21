@@ -15,10 +15,15 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.MariaDBDialect
 
+  application:
+    name: learning-service
+  config:
+    import: "optional:configserver:http://config-service"
+
 server:
   port: 8080
 
-  # Swagger는 자동 활성화됨
+# Swagger는 자동 활성화됨
 springfox:
   documentation:
     swagger-ui:

@@ -8,12 +8,9 @@ import com.example.learning.domain.entity.Difficulty;
 import com.example.learning.domain.entity.StoryQuizQuestionEntity;
 
 public interface StoryQuizQuestionRepository
-        extends JpaRepository<StoryQuizQuestionEntity, Long> {
+                extends JpaRepository<StoryQuizQuestionEntity, Long> {
 
-    List<StoryQuizQuestionEntity> findByStoryIdAndDifficultyOrderByIdAsc(
-            Long storyId, Difficulty difficulty);
-
-    List<StoryQuizQuestionEntity> findByStoryIdOrderByIdAsc(Long storyId);
-    
+        List<StoryQuizQuestionEntity> findByStoryIdAndDifficultyOrderByIdAsc(
+                        Long storyId, Difficulty difficulty);
 
 }
