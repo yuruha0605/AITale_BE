@@ -18,7 +18,7 @@ server:
 
 eureka: ##
   client:
-    enabled: false ### 테스트
+    enabled: true ### 테스트
 
 spring:
  
@@ -57,5 +57,5 @@ spring:
             password: 
             timeout: 6000ms
 
-jwt:
-    secret: ${JWT_SECRET}
+# jwt:
+#     secret: ${JWT_SECRET}
