@@ -9,3 +9,12 @@
 #   cloud:
 #     config:
 #       fail-fast: true
+
+spring:
+  application:
+    name: gamification-service
+  config:
+    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:8080}"
+  cloud:
+    config:
+      fail-fast: true
