@@ -1,0 +1,28 @@
+networks:
+  msa-network:
+    external: true
+    name: msa-network
+
+services:
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8081:8080"
+    environment:
+      SERVER_PORT: "8080"
+      SPRING_APPLICATION_NAME: user-service
+      EUREKA_CLIENT_ENABLED: "true"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SPRING_CLOUD_CONFIG_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:mariadb://host.docker.internal:3306/fairyTale
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATA_REDIS_HOST: host.docker.internal
+      SPRING_DATA_REDIS_PORT: "6379"
+      JWT_SECRET: user-service-local-secret
+    networks:
+      - msa-network
+    restart: unless-stopped
