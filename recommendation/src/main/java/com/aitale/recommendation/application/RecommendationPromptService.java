@@ -21,11 +21,12 @@ public class RecommendationPromptService {
             .append("개를 추천하세요.\n\n");
 
         builder.append("[사용자 정보]\n");
-        builder.append("- userId: ").append(user.userId()).append("\n");
         builder.append("- age: ").append(user.age()).append("\n");
         builder.append("- level: ").append(user.currentLevel()).append("\n");
         builder.append("- difficulty: ").append(user.assignedDifficulty()).append("\n");
-        builder.append("- interests: ").append(user.interests()).append("\n\n");
+        builder.append("- interests: ")
+            .append(String.join(", ", user.interests()))
+            .append("\n\n");
 
         builder.append("[후보 동화 목록]\n");
         for (StoryCandidateResponse story : stories) {
@@ -43,16 +44,18 @@ public class RecommendationPromptService {
         builder.append("4. rankOrder는 1부터 시작하는 연속된 숫자로 작성하세요.\n");
         builder.append("5. 각 추천마다 한글로 짧은 이유를 작성하세요.\n");
         builder.append("6. 설명, 마크다운, 코드블록 없이 JSON만 출력하세요.\n");
-        builder.append("7. 반드시 아래 JSON 배열 형식으로만 답하세요.\n\n");
+        builder.append("7. 반드시 아래 JSON 객체 형식으로만 답하세요.\n\n");
 
         builder.append("""
-            [
-              {
-                "storyId": 201,
-                "rankOrder": 1,
-                "reason": "관심사와 난이도에 적합한 동화입니다."
-              }
-            ]
+            {
+              "recommendations": [
+                {
+                  "storyId": 201,
+                  "rankOrder": 1,
+                  "reason": "관심사와 난이도에 적합한 동화입니다."
+                }
+              ]
+            }
             """);
 
         return builder.toString();
