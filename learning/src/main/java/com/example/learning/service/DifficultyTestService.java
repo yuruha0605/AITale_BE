@@ -60,11 +60,11 @@ public class DifficultyTestService {
         // 난이도 판정
         Difficulty assignedDifficulty;
         if (correctCount <= 3)
-            assignedDifficulty = Difficulty.LOW;
+            assignedDifficulty = Difficulty.EASY;
         else if (correctCount <= 7)
-            assignedDifficulty = Difficulty.MEDIUM;
+            assignedDifficulty = Difficulty.NORMAL;
         else
-            assignedDifficulty = Difficulty.HIGH;
+            assignedDifficulty = Difficulty.HARD;
 
         return assignedDifficulty;
     }

@@ -86,18 +86,18 @@ public class StoryQuizService {
                 }
 
                 Difficulty baseDifficulty = baseQuestions.isEmpty()
-                                ? Difficulty.LOW
+                                ? Difficulty.EASY
                                 : baseQuestions.get(0).getDifficulty();
 
-                boolean hasBonus = baseDifficulty != Difficulty.HIGH
+                boolean hasBonus = baseDifficulty != Difficulty.HARD
                                 && correctCount == baseQuestions.size();
 
                 Difficulty nextDifficulty = null;
 
                 if (hasBonus) {
-                        nextDifficulty = baseDifficulty == Difficulty.LOW
-                                        ? Difficulty.MEDIUM
-                                        : Difficulty.HIGH;
+                        nextDifficulty = baseDifficulty == Difficulty.EASY
+                                        ? Difficulty.NORMAL
+                                        : Difficulty.HARD;
                 }
 
                 StudyRecordEntity record = StudyRecordEntity.builder()
@@ -106,7 +106,7 @@ public class StoryQuizService {
                                 .baseCorrectCount(correctCount)
                                 .bonusCorrectCount(0)
                                 .isBonusTriggered(false)
-                                .isHighestDifficulty(baseDifficulty == Difficulty.HIGH)
+                                .isHighestDifficulty(baseDifficulty == Difficulty.HARD)
                                 .totalScore(baseScore)
                                 .createdAt(LocalDateTime.now())
                                 .build();

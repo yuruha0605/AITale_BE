@@ -1,9 +1,9 @@
 package com.example.learning.domain.entity;
 
 public enum Difficulty {
-    LOW(1),
-    MEDIUM(2),
-    HIGH(3);
+    EASY(1),
+    NORMAL(2),
+    HARD(3);
 
     private final int score;
 
