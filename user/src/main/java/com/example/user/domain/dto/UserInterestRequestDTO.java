@@ -1,6 +1,6 @@
 package com.example.user.domain.dto;
 
-import jakarta.persistence.Column;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,11 +14,8 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDTO {
+public class UserInterestRequestDTO {
 
-    private String email;
-    private int age;
-    private int currentLevel;
-    private String assignedDifficulty; // 학습난이도
+    private List<Long> interests;
 
 }
