@@ -38,9 +38,12 @@ public class RecommendationPromptService {
 
         builder.append("\n[규칙]\n");
         builder.append("1. 나이, 레벨, 관심사, 난이도를 모두 고려하세요.\n");
-        builder.append("2. 가장 적절한 순서대로 추천하세요.\n");
-        builder.append("3. 각 추천마다 짧은 이유를 작성하세요.\n");
-        builder.append("4. 반드시 아래 JSON 배열 형식으로만 답하세요.\n\n");
+        builder.append("2. 반드시 후보 동화 목록에 있는 storyId만 사용하세요.\n");
+        builder.append("3. 가장 적절한 순서대로 ").append(size).append("개를 추천하세요.\n");
+        builder.append("4. rankOrder는 1부터 시작하는 연속된 숫자로 작성하세요.\n");
+        builder.append("5. 각 추천마다 한글로 짧은 이유를 작성하세요.\n");
+        builder.append("6. 설명, 마크다운, 코드블록 없이 JSON만 출력하세요.\n");
+        builder.append("7. 반드시 아래 JSON 배열 형식으로만 답하세요.\n\n");
 
         builder.append("""
             [
