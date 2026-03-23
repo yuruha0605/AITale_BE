@@ -1,0 +1,54 @@
+networks:
+  msa-network:
+    external: true
+    name: msa-network
+
+services:
+  user-db:
+    image: mariadb:11.4
+    container_name: user-db
+    environment:
+      MARIADB_ROOT_PASSWORD: 1234
+      MARIADB_DATABASE: fairyTale
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -uroot -p1234 --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - msa-network
+    restart: unless-stopped
+
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8081:8080"
+    environment:
+      SERVER_PORT: "8080"
+      SPRING_APPLICATION_NAME: user-service
+      EUREKA_CLIENT_ENABLED: "true"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+      EUREKA_INSTANCE_INSTANCE_ID: user-service:8080
+      EUREKA_INSTANCE_HOSTNAME: user-service
+      SPRING_APPLICATION_JSON: '{"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-server:8761/eureka/"}}}}'
+      SPRING_CLOUD_CONFIG_ENABLED: "false"
+      SPRING_CLOUD_BUS_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:mariadb://user-db:3306/fairyTale
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATA_REDIS_HOST: host.docker.internal
+      SPRING_DATA_REDIS_PORT: "6379"
+      JWT_SECRET: user-service-local-secret
+    depends_on:
+      user-db:
+        condition: service_healthy
+    networks:
+      - msa-network
+    restart: unless-stopped

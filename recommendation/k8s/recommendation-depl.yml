@@ -55,6 +55,12 @@ spec:
               secretKeyRef:
                 name: lgcns-app-secrets
                 key: DB_PASSWORD
+
+          - name: CONFIG_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                name: aitale-config
+                key: CONFIG_SERVER_URL
           
           # Container 상태를 확인할 수 있는 설정들도 넣어줄 수 있다.
           # readinessProbe:

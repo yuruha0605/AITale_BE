@@ -30,7 +30,10 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository userRepository;
+<<<<<<< HEAD
     private final UserInterestRepository userInterestRepository;
+=======
+>>>>>>> 697b9096ab727e3e41a1a885a4f0868b2d78e1fe
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
@@ -41,7 +44,10 @@ public class UserService {
                 .email(userRequestDTO.getEmail())
                 .password(passwordEncoder.encode(userRequestDTO.getPassword())) // 암호화 후 주입
                 .age(userRequestDTO.getAge())
+<<<<<<< HEAD
                 .currentLevel(1)
+=======
+>>>>>>> 697b9096ab727e3e41a1a885a4f0868b2d78e1fe
                 .build();
 
         // 2. DB 저장 (save 메서드는 Entity를 인자로 받습니다)
@@ -75,6 +81,7 @@ public class UserService {
         }
 
         System.out.println(">>>> 2. user service 토큰 생성");
+<<<<<<< HEAD
         String at = jwtProvider.createAT(entity.getUserSystemId());
         String rt = jwtProvider.createRT(entity.getUserSystemId());
 
@@ -82,18 +89,34 @@ public class UserService {
         redisTemplate.opsForValue()
                 .set("RT:" + entity.getEmail(), rt, REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
 
+=======
+        String at = jwtProvider.createAT(entity.getEmail());
+        String rt = jwtProvider.createRT(entity.getEmail());
+
+        System.out.println(">>>> 3. user service RT토큰 Redis 저장");
+        redisTemplate.opsForValue()
+                .set("RT:" + entity.getEmail(), rt, REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
+
+>>>>>>> 697b9096ab727e3e41a1a885a4f0868b2d78e1fe
         map.put("access", at);
         map.put("refresh", rt);
 
         return map;
     }
 
+<<<<<<< HEAD
     // 난이도 배정
     public String createAssignedDifficulty(Long userSystemId, String difficulty) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
                 .orElseThrow(() -> new RuntimeException("Not Found!!"));
         userEntity.setAssignedDifficulty(difficulty);
+=======
+    // 난이도 배정 기능은 추후 비즈니스 로직 연결 예정
+    public void assignedDifficulty(int score) {
+        // TODO: score 기반 난이도 계산 및 사용자 프로필 반영
+    }
+>>>>>>> 697b9096ab727e3e41a1a885a4f0868b2d78e1fe
 
         userRepository.save(userEntity);
         return difficulty;
@@ -173,4 +196,9 @@ public class UserService {
 
     }
 
+<<<<<<< HEAD
+=======
+    // 관심사 관리
+
+>>>>>>> 697b9096ab727e3e41a1a885a4f0868b2d78e1fe
 }

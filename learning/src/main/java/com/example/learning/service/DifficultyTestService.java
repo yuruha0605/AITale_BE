@@ -21,7 +21,6 @@ public class DifficultyTestService {
 
     private final DifficultyTestQuestionRepository questionRepository;
     private final ObjectMapper objectMapper;
-    private final UserOpenFeignService userOpenFeignService;
 
     // 문제 조회
     public List<QuestionDTO> getQuestions(Integer ageGroup, Integer page) {
@@ -30,7 +29,8 @@ public class DifficultyTestService {
                     List<String> options;
                     try {
                         options = objectMapper.readValue(q.getOptions(),
-                                new TypeReference<List<String>>() {});
+                                new TypeReference<List<String>>() {
+                                });
                     } catch (Exception e) {
                         throw new RuntimeException("options parsing error", e);
                     }
@@ -60,15 +60,11 @@ public class DifficultyTestService {
         // 난이도 판정
         Difficulty assignedDifficulty;
         if (correctCount <= 3)
-            assignedDifficulty = Difficulty.LOW;
+            assignedDifficulty = Difficulty.EASY;
         else if (correctCount <= 7)
-            assignedDifficulty = Difficulty.MEDIUM;
+            assignedDifficulty = Difficulty.NORMAL;
         else
-            assignedDifficulty = Difficulty.HIGH;
-
-        // // FeignClient로 user-service 호출
-        // Map<String, String> body = Map.of("assignedDifficulty", assignedDifficulty.name());
-        // userOpenFeignService.updateAssignedDifficulty(userId, body);
+            assignedDifficulty = Difficulty.HARD;
 
         return assignedDifficulty;
     }
