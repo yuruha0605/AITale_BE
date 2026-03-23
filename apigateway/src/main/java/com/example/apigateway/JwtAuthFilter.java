@@ -27,8 +27,10 @@ public class JwtAuthFilter implements GlobalFilter {
 
     // WHITE LIST
     private static final List<String> WHITE_LIST_PATHS = List.of(
-            "/users/signIn",
-            "/user-service/users/signIn",
+            "/user/signIn",
+            "/user/signUp",
+            "/user-service/user/signIn",
+            "/user-service/user/signUp",
             "/health/alive",
             "/actuator/health",
             "/product/list");
@@ -67,6 +69,10 @@ public class JwtAuthFilter implements GlobalFilter {
         System.out.println(">>>> [JwtAuthFilter] User EndPoint : " + endPoint);
         System.out.println(">>>> [JwtAuthFilter] Request Method : " + method);
 
+        if ("OPTIONS".equalsIgnoreCase(method)) {
+            return chain.filter(exchange);
+        }
+
         if (isWhitelisted(endPoint)) {
             System.out.println(">>>> [JwtAuthFilter] filter WHITE LIST PASSED : " + endPoint);
             return chain.filter(exchange);
@@ -82,17 +88,13 @@ public class JwtAuthFilter implements GlobalFilter {
             System.out.println(">>>> [JwtAuthFilter] Token : " + token);
 
             Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-            String email = claims.getSubject();
-            System.out.println(">>>> [JwtAuthFilter] claims get email : " + email);
+            String userId = extractUserId(claims);
+            System.out.println(">>>> [JwtAuthFilter] claims get userId : " + userId);
 
-            // JwtProvider 의해서 Role 입력된 경우에만 해당
-            String role = claims.get("role", String.class);
-            System.out.println(">>>> [JwtAuthFilter] claims get role : " + role);
-
-            // X-User-Id 변수로 Email 값과 Role 추가
+            // X-User-Id 변수만 전달
             // X custom header 라는 것을 의미하는 관례...
             ServerWebExchange modifyExchange = exchange.mutate().request(
-                    builder -> builder.header("X-User-Email", email).header("X-User-Role", role))
+                    builder -> builder.header("X-User-Id", userId))
                     .build();
             return chain.filter(modifyExchange);
         } catch (Exception e) {
@@ -100,6 +102,17 @@ public class JwtAuthFilter implements GlobalFilter {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
+    }
+
+    private String extractUserId(Claims claims) {
+        Object id = claims.get("id");
+        if (id == null) {
+            id = claims.get("userId");
+        }
+        if (id != null) {
+            return String.valueOf(id);
+        }
+        return claims.getSubject();
     }
 
     private boolean isWhitelisted(String endPoint) {

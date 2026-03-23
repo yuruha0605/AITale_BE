@@ -11,20 +11,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder() ;
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // 로컬 테스트의 주적, CSRF는 끕니다.
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // ⚠️ 개발 중에는 일단 다 열고 기능부터 만드세요!
-            );
+                .csrf(csrf -> csrf.disable()) // 로컬 테스트의 주적, CSRF는 끕니다.
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll() // ⚠️ 개발 중에는 일단 다 열고 기능부터 만드세요!
+                );
         return http.build();
-}
+    }
 
 }
