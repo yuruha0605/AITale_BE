@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar" />
+        </processorPath>
+        <module name="ai.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="com.example.analytics" target="17" />
+      <module name="com.example.analytics.main" target="17" />
+      <module name="com.example.analytics.test" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ai" options="-parameters" />
+      <module name="ai.main" options="-parameters" />
+      <module name="ai.test" options="-parameters" />
+      <module name="analytics" options="-parameters" />
+      <module name="analytics.main" options="-parameters" />
+      <module name="analytics.test" options="-parameters" />
+      <module name="apigateway" options="-parameters" />
+      <module name="apigateway.main" options="-parameters" />
+      <module name="apigateway.test" options="-parameters" />
+      <module name="com.example.analytics" options="-parameters" />
+      <module name="com.example.analytics.main" options="-parameters" />
+      <module name="com.example.analytics.test" options="-parameters" />
+      <module name="gamification" options="-parameters" />
+      <module name="gamification.main" options="-parameters" />
+      <module name="gamification.test" options="-parameters" />
+      <module name="learning" options="-parameters" />
+      <module name="learning.main" options="-parameters" />
+      <module name="learning.test" options="-parameters" />
+      <module name="recommendation" options="-parameters" />
+      <module name="recommendation.main" options="-parameters" />
+      <module name="recommendation.test" options="-parameters" />
+      <module name="user" options="-parameters" />
+      <module name="user.main" options="-parameters" />
+      <module name="user.test" options="-parameters" />
+    </option>
+  </component>
+</project>

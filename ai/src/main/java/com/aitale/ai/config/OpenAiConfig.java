@@ -1,4 +1,4 @@
-package com.aitale.aiservice.config;
+package com.aitale.ai.config;
 
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
