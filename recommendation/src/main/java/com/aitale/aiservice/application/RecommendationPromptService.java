@@ -1,4 +1,4 @@
-package com.aitale.recommendation.application;
+package com.aitale.aiservice.application;
 
 import com.aitale.recommendation.dto.response.StoryCandidateResponse;
 import com.aitale.recommendation.dto.response.UserProfileResponse;
