@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
@@ -17,6 +19,14 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("Story Service API 명세서")
                         .description("MSA 구조에서 스토리 도메인을 담당하는 API")
-                        .version("1.0.0"));
+                        .version("1.0.0"))
+                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
+                .components(new io.swagger.v3.oas.models.Components()
+                        .addSecuritySchemes("Bearer Authentication",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                                        .description("JWT Bearer Token")));
     }
 }
