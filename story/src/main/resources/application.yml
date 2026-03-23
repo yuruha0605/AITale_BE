@@ -1,17 +1,4 @@
- 
-# Config Server AWS version
-# spring:
-#   application:
-#     name: story-service
-#   config:
-#     import: "optional:configserver:http://config-service"
-
-#   cloud:
-#     config:
-#       fail-fast: true
-
-
-# Docker version
+# Config Server version
 spring:
   application:
     name: story-service
