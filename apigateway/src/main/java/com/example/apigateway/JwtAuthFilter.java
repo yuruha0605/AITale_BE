@@ -28,8 +28,26 @@ public class JwtAuthFilter implements GlobalFilter {
     // WHITE LIST
     private static final List<String> WHITE_LIST_PATHS = List.of(
             "/users/signIn",
+            "/user-service/users/signIn",
             "/health/alive",
+            "/actuator/health",
             "/product/list");
+
+    private static final List<String> WHITE_LIST_PREFIXES = List.of(
+            "/swagger-ui",
+            "/v3/api-docs",
+            "/story-service/swagger-ui",
+            "/story-service/v3/api-docs",
+            "/user-service/swagger-ui",
+            "/user-service/v3/api-docs",
+            "/analytics-service/swagger-ui",
+            "/analytics-service/v3/api-docs",
+            "/gamification-service/swagger-ui",
+            "/gamification-service/v3/api-docs",
+            "/learning-service/swagger-ui",
+            "/learning-service/v3/api-docs",
+            "/recommendation-service/swagger-ui",
+            "/recommendation-service/v3/api-docs");
 
     @PostConstruct
     private void init() {
@@ -49,7 +67,7 @@ public class JwtAuthFilter implements GlobalFilter {
         System.out.println(">>>> [JwtAuthFilter] User EndPoint : " + endPoint);
         System.out.println(">>>> [JwtAuthFilter] Request Method : " + method);
 
-        if (WHITE_LIST_PATHS.contains(endPoint)) {
+        if (isWhitelisted(endPoint)) {
             System.out.println(">>>> [JwtAuthFilter] filter WHITE LIST PASSED : " + endPoint);
             return chain.filter(exchange);
         }
@@ -82,5 +100,13 @@ public class JwtAuthFilter implements GlobalFilter {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
+    }
+
+    private boolean isWhitelisted(String endPoint) {
+        if (WHITE_LIST_PATHS.contains(endPoint)) {
+            return true;
+        }
+
+        return WHITE_LIST_PREFIXES.stream().anyMatch(endPoint::startsWith);
     }
 }
