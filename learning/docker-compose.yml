@@ -4,13 +4,13 @@ networks:
     name: msa-network
 
 services:
-  ai-service:
+  learning-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ai-service
+    container_name: learning-service
     ports:
-      - "9000:8080"
+      - "8083:8080"
     environment:
       CONFIG_SERVER_URL: http://host.docker.internal:8080
       SPRING_CLOUD_BUS_ENABLED: "false"

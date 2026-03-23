@@ -4,17 +4,16 @@ networks:
     name: msa-network
 
 services:
-  ai-service:
+  gamification-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ai-service
+    container_name: gamification-service
     ports:
-      - "9000:8080"
+      - "8084:8080"
     environment:
       CONFIG_SERVER_URL: http://host.docker.internal:8080
       SPRING_CLOUD_BUS_ENABLED: "false"
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       SPRING_DATASOURCE_URL: jdbc:mariadb://${DB_HOST:-host.docker.internal}:${DB_PORT:-3306}/${DB_NAME:-inspire}?sslMode=REQUIRED
       SPRING_DATA_REDIS_HOST: host.docker.internal
       SPRING_KAFKA_BOOTSTRAP_SERVERS: host.docker.internal:9092
