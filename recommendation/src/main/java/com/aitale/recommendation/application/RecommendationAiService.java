@@ -1,7 +1,7 @@
 package com.aitale.recommendation.application;
 
-import com.aitale.recommendation.dto.ai.AiRecommendRequest;
-import com.aitale.recommendation.dto.ai.AiRecommendationResult;
+import com.aitale.aiservice.dto.AiRecommendRequest;
+import com.aitale.aiservice.dto.AiRecommendationResult;
 import com.aitale.recommendation.dto.response.StoryCandidateResponse;
 import com.aitale.recommendation.dto.response.UserProfileResponse;
 import com.aitale.recommendation.infrastructure.AiRecommendationClient;
