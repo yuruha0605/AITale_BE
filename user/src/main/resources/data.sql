@@ -1,5 +1,15 @@
-INSERT INTO interest_tbl (interest_name) VALUES ('공룡');
-INSERT INTO interest_tbl (interest_name) VALUES ('우주');
-INSERT INTO interest_tbl (interest_name) VALUES ('바다');
-INSERT INTO interest_tbl (interest_name) VALUES ('숲');
-INSERT INTO interest_tbl (interest_name) VALUES ('동화');
+INSERT INTO interest_tbl (interest_name) VALUES ('가족');     -- interest_id = 1
+INSERT INTO interest_tbl (interest_name) VALUES ('사랑');     -- interest_id = 2
+INSERT INTO interest_tbl (interest_name) VALUES ('우정');     -- interest_id = 3
+INSERT INTO interest_tbl (interest_name) VALUES ('모험');     -- interest_id = 4
+INSERT INTO interest_tbl (interest_name) VALUES ('자연');     -- interest_id = 5
+INSERT INTO interest_tbl (interest_name) VALUES ('마법');     -- interest_id = 6
+INSERT INTO interest_tbl (interest_name) VALUES ('꿈');      -- interest_id = 7
+INSERT INTO interest_tbl (interest_name) VALUES ('동네');     -- interest_id = 8
+INSERT INTO interest_tbl (interest_name) VALUES ('전래동화');  -- interest_id = 9
+INSERT INTO interest_tbl (interest_name) VALUES ('용기');     -- interest_id = 10
+INSERT INTO interest_tbl (interest_name) VALUES ('과학');     -- interest_id = 11
+INSERT INTO interest_tbl (interest_name) VALUES ('예술');     -- interest_id = 12
+INSERT INTO interest_tbl (interest_name) VALUES ('우주');     -- interest_id = 13
+INSERT INTO interest_tbl (interest_name) VALUES ('건강');     -- interest_id = 14
+INSERT INTO interest_tbl (interest_name) VALUES ('창의');     -- interest_id = 15

@@ -3,13 +3,23 @@ package com.example.user.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import lombok.RequiredArgsConstructor;
+
 // 필터의 역할이 api gateway로 빠짐.
 @Configuration
+
+// google auth 관련 설정
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    // google auth 관련 설정
+    private final OAuth2AuthenticationSuccessHandler authHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -21,8 +31,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // 로컬 테스트의 주적, CSRF는 끕니다.
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // ⚠️ 개발 중에는 일단 다 열고 기능부터 만드세요!
-                );
+                        .anyRequest().permitAll())
+                // google auth 관련 설정
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(authHandler));
         return http.build();
     }
 

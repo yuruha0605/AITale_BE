@@ -21,7 +21,7 @@ public class UserInterestEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userInterestId; // 비즈니스적 의미는 없지만, 관리를 위한 '의도적인 PK'
+    private Long userInterestId; // 비즈니스적 의미는 없지만, 관리를 위한 pk
 
     @Column(name = "user_system_id")
     private Long userSystemId;

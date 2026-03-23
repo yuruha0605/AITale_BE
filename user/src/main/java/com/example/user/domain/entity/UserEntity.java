@@ -10,13 +10,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name="user_tbl")
+@Table(name = "user_tbl")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 public class UserEntity {
 
     @Id
@@ -26,12 +28,11 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     private int age;
 
-   @Column(columnDefinition = "int default 1")
+    @Column(columnDefinition = "int default 1")
     private int currentLevel = 1; // 기본값 1
 
     private String assignedDifficulty; // 학습난이도
