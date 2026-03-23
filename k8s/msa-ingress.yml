@@ -9,8 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: server.mhpark0605.shop
-    http:
+  - http:
       paths:
       - path: /
         pathType: Prefix
