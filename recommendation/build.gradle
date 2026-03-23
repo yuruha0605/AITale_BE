@@ -50,6 +50,9 @@ dependencies {
     // config server 사용 시
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+
+    // open ai
+    implementation 'com.openai:openai-java:4.6.1'
 }
 
 dependencyManagement {
