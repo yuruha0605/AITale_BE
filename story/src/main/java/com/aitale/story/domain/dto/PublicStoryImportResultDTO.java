@@ -1,0 +1,16 @@
+package com.aitale.story.domain.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PublicStoryImportResultDTO {
+
+    private Integer requestedCount;
+    private Integer savedCount;
+}
