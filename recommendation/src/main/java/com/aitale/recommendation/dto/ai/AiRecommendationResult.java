@@ -1,4 +1,4 @@
-package com.aitale.recommendation.dto.response;
+package com.aitale.recommendation.dto.ai;
 
 import java.util.List;
 
