@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: ai-service
+  config:
+    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:8080}"
+  cloud:
+    config:
+      fail-fast: true
