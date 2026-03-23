@@ -1,4 +1,4 @@
-package com.example.story;
+package com.aitale.story;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

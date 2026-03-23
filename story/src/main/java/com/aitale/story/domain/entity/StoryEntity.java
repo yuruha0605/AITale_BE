@@ -1,4 +1,4 @@
-package com.example.story.domain.entity;
+package com.aitale.story.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

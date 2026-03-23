@@ -1,4 +1,4 @@
-package com.example.story.config;
+package com.aitale.story.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.example.story.service;
+package com.aitale.story.service;
 
 import java.util.List;
 
@@ -6,17 +6,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.example.story.dao.GenreRepository;
-import com.example.story.dao.StoryRepository;
-import com.example.story.domain.dto.GenreCreateRequestDTO;
-import com.example.story.domain.dto.GenreResponseDTO;
-import com.example.story.domain.dto.PublicStoryImportRequestDTO;
-import com.example.story.domain.dto.PublicStoryImportResultDTO;
-import com.example.story.domain.dto.PublicStoryItemDTO;
-import com.example.story.domain.dto.StoryCreateRequestDTO;
-import com.example.story.domain.dto.StoryResponseDTO;
-import com.example.story.domain.entity.GenreEntity;
-import com.example.story.domain.entity.StoryEntity;
+import com.aitale.story.dao.GenreRepository;
+import com.aitale.story.dao.StoryRepository;
+import com.aitale.story.domain.dto.GenreCreateRequestDTO;
+import com.aitale.story.domain.dto.GenreResponseDTO;
+import com.aitale.story.domain.dto.PublicStoryImportRequestDTO;
+import com.aitale.story.domain.dto.PublicStoryImportResultDTO;
+import com.aitale.story.domain.dto.PublicStoryItemDTO;
+import com.aitale.story.domain.dto.StoryCreateRequestDTO;
+import com.aitale.story.domain.dto.StoryResponseDTO;
+import com.aitale.story.domain.entity.GenreEntity;
+import com.aitale.story.domain.entity.StoryEntity;
 
 import lombok.RequiredArgsConstructor;
 

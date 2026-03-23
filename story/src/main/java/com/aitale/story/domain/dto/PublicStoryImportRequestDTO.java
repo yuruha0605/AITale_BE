@@ -1,4 +1,4 @@
-package com.example.story.domain.dto;
+package com.aitale.story.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenreResponseDTO {
+public class PublicStoryImportRequestDTO {
 
     private Long genreId;
-    private String genreName;
+    private String keyword;
+    private Integer pageNo;
+    private Integer numOfRows;
 }

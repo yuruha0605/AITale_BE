@@ -1,4 +1,4 @@
-package com.example.story.domain.dto;
+package com.aitale.story.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

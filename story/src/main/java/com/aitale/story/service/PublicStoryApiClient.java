@@ -1,4 +1,4 @@
-package com.example.story.service;
+package com.aitale.story.service;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.example.story.domain.dto.PublicStoryItemDTO;
+import com.aitale.story.domain.dto.PublicStoryItemDTO;
 
 import lombok.RequiredArgsConstructor;
 

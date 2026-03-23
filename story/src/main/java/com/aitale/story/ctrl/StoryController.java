@@ -1,4 +1,4 @@
-package com.example.story.ctrl;
+package com.aitale.story.ctrl;
 
 import java.util.List;
 
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.story.domain.dto.GenreCreateRequestDTO;
-import com.example.story.domain.dto.GenreResponseDTO;
-import com.example.story.domain.dto.PublicStoryImportRequestDTO;
-import com.example.story.domain.dto.PublicStoryImportResultDTO;
-import com.example.story.domain.dto.StoryCreateRequestDTO;
-import com.example.story.domain.dto.StoryResponseDTO;
-import com.example.story.service.StoryService;
+import com.aitale.story.domain.dto.GenreCreateRequestDTO;
+import com.aitale.story.domain.dto.GenreResponseDTO;
+import com.aitale.story.domain.dto.PublicStoryImportRequestDTO;
+import com.aitale.story.domain.dto.PublicStoryImportResultDTO;
+import com.aitale.story.domain.dto.StoryCreateRequestDTO;
+import com.aitale.story.domain.dto.StoryResponseDTO;
+import com.aitale.story.service.StoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
