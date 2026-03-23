@@ -1,7 +1,9 @@
 package com.example.user.config;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,14 +29,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+            ObjectProvider<ClientRegistrationRepository> clientRegistrationRepositoryProvider) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // 로컬 테스트의 주적, CSRF는 끕니다.
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll())
-                // google auth 관련 설정
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(authHandler));
+                        .anyRequest().permitAll());
+
+        // OAuth2 클라이언트 설정이 있을 때만 oauth2Login 필터를 활성화합니다.
+        if (clientRegistrationRepositoryProvider.getIfAvailable() != null) {
+            http.oauth2Login(oauth2 -> oauth2.successHandler(authHandler));
+        }
+
         return http.build();
 
     }
