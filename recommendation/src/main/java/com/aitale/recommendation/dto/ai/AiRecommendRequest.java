@@ -1,4 +1,4 @@
-package com.aitale.aiservice.dto;
+package com.aitale.recommendation.dto.ai;
 
 public record AiRecommendRequest(String prompt) {
 

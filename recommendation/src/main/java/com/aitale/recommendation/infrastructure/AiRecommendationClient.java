@@ -1,7 +1,7 @@
 package com.aitale.recommendation.infrastructure;
 
-import com.aitale.aiservice.dto.AiRecommendRequest;
-import com.aitale.aiservice.dto.AiRecommendationResult;
+import com.aitale.recommendation.dto.ai.AiRecommendRequest;
+import com.aitale.recommendation.dto.ai.AiRecommendationResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
