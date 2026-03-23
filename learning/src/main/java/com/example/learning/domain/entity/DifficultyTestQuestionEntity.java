@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
 @Entity
 @Builder
 @Getter
@@ -35,6 +34,5 @@ public class DifficultyTestQuestionEntity {
 
     @Column(name = "page_number")
     private Integer pageNumber;
-
 
 }

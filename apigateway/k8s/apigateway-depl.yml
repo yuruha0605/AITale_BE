@@ -26,6 +26,13 @@ spec:
           image: 811221506617.dkr.ecr.ap-northeast-2.amazonaws.com/apigateway:latest
           ports:
           - containerPort: 8080
+
+          env:
+          - name: CONFIG_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                name: aitale-config
+                key: CONFIG_SERVER_URL
           
 ---
 # core service setting

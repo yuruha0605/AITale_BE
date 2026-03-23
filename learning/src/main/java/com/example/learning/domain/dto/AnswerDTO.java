@@ -3,6 +3,8 @@ package com.example.learning.domain.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.learning.domain.entity.Difficulty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,10 +19,14 @@ import lombok.ToString;
 public class AnswerDTO {
 
     private Long userId;
+    private Long storyId;
     private Long questionId;
     private Integer answer;
 
     @Builder.Default
     private List<AnswerDTO> answers = new ArrayList<>();
+
+    // 보너스 제출 시만 사용
+    private Difficulty bonusDifficulty;
 
 }

@@ -37,7 +37,4 @@ public class StoryQuizQuestionEntity {
     @Column(nullable = false)
     private Difficulty difficulty;
 
-    @Column(nullable = false)
-    private boolean isBonus;            // 보너스 문제 여부 (서비스에서 동적으로 처리)
-    
 }
