@@ -1,7 +1,20 @@
 package com.aitale.story.ctrl;
 
+import com.aitale.story.domain.dto.GenreCreateRequestDTO;
+import com.aitale.story.domain.dto.GenreResponseDTO;
+import com.aitale.story.domain.dto.PublicStoryImportRequestDTO;
+import com.aitale.story.domain.dto.PublicStoryImportResultDTO;
+import com.aitale.story.domain.dto.StoryCreateRequestDTO;
+import com.aitale.story.domain.dto.StoryResponseDTO;
+import com.aitale.story.domain.dto.request.StoryGenerateRequest;
+import com.aitale.story.domain.dto.request.StoryImageGenerateRequest;
+import com.aitale.story.domain.dto.response.StoryGenerateResponse;
+import com.aitale.story.domain.dto.response.StoryImageGenerateResponse;
+import com.aitale.story.service.StoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,18 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.aitale.story.domain.dto.GenreCreateRequestDTO;
-import com.aitale.story.domain.dto.GenreResponseDTO;
-import com.aitale.story.domain.dto.PublicStoryImportRequestDTO;
-import com.aitale.story.domain.dto.PublicStoryImportResultDTO;
-import com.aitale.story.domain.dto.StoryCreateRequestDTO;
-import com.aitale.story.domain.dto.StoryResponseDTO;
-import com.aitale.story.service.StoryService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 
 // MSA 구조에서 Story 도메인만 담당하는 Story-Service API
 @Tag(name = "Story-Service", description = "스토리/장르/공공데이터 연동 API")
@@ -35,7 +36,8 @@ public class StoryController {
 
     @Operation(summary = "장르 생성", description = "새로운 장르를 생성합니다.")
     @PostMapping("/genres")
-    public ResponseEntity<GenreResponseDTO> createGenre(@RequestBody GenreCreateRequestDTO request) {
+    public ResponseEntity<GenreResponseDTO> createGenre(
+        @RequestBody GenreCreateRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(storyService.createGenre(request));
     }
 
@@ -47,7 +49,8 @@ public class StoryController {
 
     @Operation(summary = "스토리 생성", description = "스토리를 수동으로 생성합니다.")
     @PostMapping
-    public ResponseEntity<StoryResponseDTO> createStory(@RequestBody StoryCreateRequestDTO request) {
+    public ResponseEntity<StoryResponseDTO> createStory(
+        @RequestBody StoryCreateRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(storyService.createStory(request));
     }
 
@@ -59,13 +62,31 @@ public class StoryController {
 
     @Operation(summary = "스토리 목록 조회", description = "genreId 선택 필터로 스토리 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<StoryResponseDTO>> getStories(@RequestParam(required = false) Long genreId) {
+    public ResponseEntity<List<StoryResponseDTO>> getStories(
+        @RequestParam(required = false) Long genreId) {
         return ResponseEntity.ok(storyService.getStories(genreId));
     }
 
     @Operation(summary = "공공데이터 가져오기", description = "문화공공데이터 API에서 스토리 목록을 가져와 저장합니다.")
     @PostMapping("/import/public-data")
-    public ResponseEntity<PublicStoryImportResultDTO> importStories(@RequestBody PublicStoryImportRequestDTO request) {
+    public ResponseEntity<PublicStoryImportResultDTO> importStories(
+        @RequestBody PublicStoryImportRequestDTO request) {
         return ResponseEntity.ok(storyService.importStoriesFromPublicApi(request));
+    }
+
+    @Operation(summary = "AI 동화 생성", description = "AI로 동화를 생성하고 저장합니다.")
+    @PostMapping("/ai")
+    public ResponseEntity<StoryGenerateResponse> generateStory(
+        @RequestBody StoryGenerateRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(storyService.generateStory(request));
+    }
+
+    @Operation(summary = "AI 동화 이미지 생성", description = "기존 동화에 대한 AI 이미지를 생성합니다.")
+    @PostMapping("/{storyId}/ai-image")
+    public ResponseEntity<StoryImageGenerateResponse> generateStoryImage(
+        @PathVariable Long storyId,
+        @RequestBody StoryImageGenerateRequest request) {
+        return ResponseEntity.ok(storyService.generateStoryImage(storyId, request));
     }
 }
