@@ -50,4 +50,8 @@ public class StoryEntity {
 
     @Column(name = "origin_thumb_url", length = 1000)
     private String originThumbUrl;
+
+    public void updateAiImageUrl(String aiImageUrl) {
+        this.aiImageUrl = aiImageUrl;
+    }
 }
