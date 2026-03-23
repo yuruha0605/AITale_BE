@@ -38,10 +38,8 @@ public class JwtAuthFilter implements GlobalFilter {
     private static final List<String> WHITE_LIST_PREFIXES = List.of(
             "/swagger-ui",
             "/v3/api-docs",
-            "/story-service/swagger-ui",
-            "/story-service/v3/api-docs",
-            "/user-service/swagger-ui",
-            "/user-service/v3/api-docs",
+            "/ai-service/swagger-ui",
+            "/ai-service/v3/api-docs",
             "/analytics-service/swagger-ui",
             "/analytics-service/v3/api-docs",
             "/gamification-service/swagger-ui",
@@ -49,7 +47,11 @@ public class JwtAuthFilter implements GlobalFilter {
             "/learning-service/swagger-ui",
             "/learning-service/v3/api-docs",
             "/recommendation-service/swagger-ui",
-            "/recommendation-service/v3/api-docs");
+            "/recommendation-service/v3/api-docs",
+            "/story-service/swagger-ui",
+            "/story-service/v3/api-docs",
+            "/user-service/swagger-ui",
+            "/user-service/v3/api-docs");
 
     @PostConstruct
     private void init() {
