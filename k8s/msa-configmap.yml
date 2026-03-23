@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aitale-config
+  namespace: lgcns
+data:
+  CONFIG_SERVER_URL: "http://config-service"
