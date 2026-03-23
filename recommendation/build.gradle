@@ -52,7 +52,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
     // open ai
-    implementation 'com.openai:openai-java:4.6.1'
+    implementation 'com.openai:openai-java:4.29.0'
 }
 
 dependencyManagement {
