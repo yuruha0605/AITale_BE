@@ -1,7 +1,7 @@
-package com.aitale.aiservice.application;
+package com.aitale.ai.application;
 
-import com.aitale.aiservice.dto.AiRecommendationRequest;
-import com.aitale.aiservice.dto.AiRecommendationResult;
+import com.aitale.ai.dto.AiRecommendationRequest;
+import com.aitale.ai.dto.AiRecommendationResult;
 import com.openai.client.OpenAIClient;
 import com.openai.models.ChatModel;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;

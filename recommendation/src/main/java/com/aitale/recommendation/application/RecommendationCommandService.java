@@ -22,9 +22,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -119,12 +121,38 @@ public class RecommendationCommandService {
         }
         // 여기까지
 
-        AiRecommendationResult aiResult =
-            recommendationAiService.recommend(userProfile, filteredStories, size);
+        log.info("추천 생성 시작 - userId={}, size={}, difficulty={}, interests={}",
+            userProfile.userId(),
+            size,
+            userProfile.assignedDifficulty(),
+            userProfile.interests());
 
-        if (aiResult == null
-            || aiResult.recommendations() == null
-            || aiResult.recommendations().isEmpty()) {
+        log.info("추천 후보 동화 수={}, storyIds={}",
+            filteredStories.size(),
+            filteredStories.stream().map(StoryCandidateResponse::storyId).toList());
+
+        AiRecommendationResult aiResult;
+        try {
+            aiResult = recommendationAiService.recommend(userProfile, filteredStories, size);
+            log.info("AI 추천 응답 수={}",
+                aiResult == null || aiResult.recommendations() == null
+                    ? null
+                    : aiResult.recommendations().size());
+        } catch (Exception e) {
+            log.error("AI 추천 호출 실패 - userId={}", userProfile.userId(), e);
+            saveFailedLog(userProfile);
+            throw new RecommendationException(RecommendationErrorCode.RECOMMENDATION_BUILD_FAILED);
+        }
+
+        if (aiResult == null) {
+            log.error("AI 추천 응답이 null 입니다. userId={}", userProfile.userId());
+            saveFailedLog(userProfile);
+            throw new RecommendationException(RecommendationErrorCode.RECOMMENDATION_BUILD_FAILED);
+        }
+
+        if (aiResult.recommendations() == null || aiResult.recommendations().isEmpty()) {
+            log.error("AI 추천 목록이 비어 있습니다. userId={}, aiResult={}",
+                userProfile.userId(), aiResult);
             saveFailedLog(userProfile);
             throw new RecommendationException(RecommendationErrorCode.RECOMMENDATION_BUILD_FAILED);
         }

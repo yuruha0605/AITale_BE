@@ -1,4 +1,4 @@
-package com.aitale.aiservice.dto;
+package com.aitale.ai.dto;
 
 import java.util.List;
 

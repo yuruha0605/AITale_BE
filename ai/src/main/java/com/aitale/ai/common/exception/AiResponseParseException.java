@@ -1,4 +1,4 @@
-package com.aitale.aiservice.common.exception;
+package com.aitale.ai.common.exception;
 
 public class AiResponseParseException extends RuntimeException {
 

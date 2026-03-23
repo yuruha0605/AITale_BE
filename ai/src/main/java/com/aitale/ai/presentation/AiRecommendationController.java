@@ -1,8 +1,8 @@
-package com.aitale.aiservice.presentation;
+package com.aitale.ai.presentation;
 
-import com.aitale.aiservice.application.OpenAiRecommendationService;
-import com.aitale.aiservice.dto.AiRecommendationRequest;
-import com.aitale.aiservice.dto.AiRecommendationResult;
+import com.aitale.ai.application.OpenAiRecommendationService;
+import com.aitale.ai.dto.AiRecommendationRequest;
+import com.aitale.ai.dto.AiRecommendationResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

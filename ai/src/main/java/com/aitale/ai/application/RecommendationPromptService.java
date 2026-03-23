@@ -1,7 +1,7 @@
-package com.aitale.aiservice.application;
+package com.aitale.ai.application;
 
-import com.aitale.aiservice.dto.AiRecommendationRequest;
-import com.aitale.aiservice.dto.AiStoryCandidate;
+import com.aitale.ai.dto.AiRecommendationRequest;
+import com.aitale.ai.dto.AiStoryCandidate;
 import org.springframework.stereotype.Service;
 
 @Service
