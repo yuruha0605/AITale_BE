@@ -18,7 +18,7 @@ services:
       # 로컬 DB/Redis를 컨테이너에서 접근하기 위한 최소 오버라이드
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
       SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION: "true"
-      SPRING_DATASOURCE_URL: jdbc:mariadb://${DB_HOST:-host.docker.internal}:${DB_PORT:-3306}/${DB_NAME:-inspire}?useSSL=true&requireSSL=true
+      SPRING_DATASOURCE_URL: jdbc:mariadb://${DB_HOST:-host.docker.internal}:${DB_PORT:-3306}/${DB_NAME:-inspire}?sslMode=REQUIRED
       SPRING_DATA_REDIS_HOST: host.docker.internal
     networks:
       - msa-network

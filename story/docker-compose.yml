@@ -16,8 +16,9 @@ services:
       CONFIG_SERVER_URL: http://host.docker.internal:8080
       SPRING_CLOUD_BUS_ENABLED: "false"
       # 로컬 DB/Redis를 컨테이너에서 접근하기 위한 최소 오버라이드
-      SPRING_DATASOURCE_URL: jdbc:mariadb://${DB_HOST:-host.docker.internal}:${DB_PORT:-3306}/${DB_NAME:-inspire}?useSSL=true&requireSSL=true
+      SPRING_DATASOURCE_URL: jdbc:mariadb://${DB_HOST:-host.docker.internal}:${DB_PORT:-3306}/${DB_NAME:-inspire}?sslMode=REQUIRED
       SPRING_DATA_REDIS_HOST: host.docker.internal
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
     networks:
       - msa-network
     restart: unless-stopped
