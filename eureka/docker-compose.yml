@@ -14,7 +14,7 @@ services:
       - "8761:8761"
     environment:
       SERVER_PORT: "8761"
-      SPRING_APPLICATION_NAME: eureka
+      SPRING_APPLICATION_NAME: eureka-service
       CONFIG_SERVER_URL: http://host.docker.internal:8080
       EUREKA_CLIENT_ENABLED: "true"
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
