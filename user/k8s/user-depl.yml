@@ -56,6 +56,12 @@ spec:
                 name: lgcns-app-secrets
                 key: DB_PASSWORD
 
+          - name: CONFIG_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                name: aitale-config
+                key: CONFIG_SERVER_URL
+
 ---
 # core service setting
 # core group : pod, service, ConfigMap, Secret, namespace
