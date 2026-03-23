@@ -1,0 +1,22 @@
+networks:
+  msa-network:
+    external: true
+    name: msa-network
+
+services:
+  recommendation-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: recommendation-service
+    ports:
+      - "8086:8080"
+    environment:
+      CONFIG_SERVER_URL: http://host.docker.internal:8080
+      SPRING_CLOUD_BUS_ENABLED: "false"
+      AI_SERVICE_URL: http://host.docker.internal:9000
+      SPRING_DATASOURCE_URL: jdbc:mariadb://${DB_HOST:-host.docker.internal}:${DB_PORT:-3306}/${DB_NAME:-inspire}?sslMode=REQUIRED
+      SPRING_DATA_REDIS_HOST: host.docker.internal
+    networks:
+      - msa-network
+    restart: unless-stopped
