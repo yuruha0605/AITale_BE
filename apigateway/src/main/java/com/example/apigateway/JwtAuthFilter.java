@@ -51,7 +51,8 @@ public class JwtAuthFilter implements GlobalFilter {
             "/story-service/swagger-ui",
             "/story-service/v3/api-docs",
             "/user-service/swagger-ui",
-            "/user-service/v3/api-docs");
+            "/user-service/v3/api-docs",
+            "/user-service/user/signIn");
 
     @PostConstruct
     private void init() {
