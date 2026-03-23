@@ -36,9 +36,9 @@ public class RecommendationCommandService {
     private final RecommendationRepository recommendationRepository;
     private final RecommendationRequestLogRepository recommendationRequestLogRepository;
     private final RecommendationCacheService recommendationCacheService;
-    private final RecommendationAiService recommendationAiService;
     private final UserServiceClient userServiceClient;
     private final StoryServiceClient storyServiceClient;
+    private final RecommendationAiService recommendationAiService;
 
     public RecommendationGenerateResponse generateRecommendations(Long userId, Integer size) {
         int recommendSize = (size == null) ? DEFAULT_SIZE : size;
