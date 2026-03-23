@@ -17,7 +17,7 @@ services:
       CONFIG_SERVER_URL: http://host.docker.internal:8080
       SPRING_CLOUD_BUS_ENABLED: "false"
       EUREKA_CLIENT_ENABLED: "true"
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
       - msa-network
     restart: unless-stopped
