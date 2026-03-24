@@ -35,7 +35,7 @@ public class OpenAiStoryAiClient implements StoryAiClient {
     @Value("${openai.chat-model:gpt-4.1-mini}")
     private String chatModel;
 
-    @Value("${openai.image-model:gpt-image-1}")
+    @Value("${openai.image-model:dall-e-3}")
     private String imageModel;
 
     @Override
@@ -78,7 +78,8 @@ public class OpenAiStoryAiClient implements StoryAiClient {
         Map<String, Object> body = Map.of(
             "model", imageModel,
             "prompt", prompt,
-            "size", "1024x1024"
+            "size", "1024x1024",
+            "response_format", "url"
         );
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
