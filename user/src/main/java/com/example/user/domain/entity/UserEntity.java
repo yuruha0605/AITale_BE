@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "user_tbl")
@@ -18,11 +17,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_system_id")
     private Long userSystemId;
 
     @Column(nullable = false, unique = true)
@@ -32,9 +31,17 @@ public class UserEntity {
 
     private int age;
 
-    @Column(columnDefinition = "int default 1")
+    @Column(name = "current_level", nullable = false)
     private int currentLevel = 1; // 기본값 1
 
-    private String assignedDifficulty; // 학습난이도
+    @Column(name = "assigned_difficulty")
+    private String assignedDifficulty; // 학습 난이도
 
+    public void assignDifficulty(String assignedDifficulty) {
+        this.assignedDifficulty = assignedDifficulty;
+    }
+
+    public void increaseLevel() {
+        this.currentLevel++;
+    }
 }
