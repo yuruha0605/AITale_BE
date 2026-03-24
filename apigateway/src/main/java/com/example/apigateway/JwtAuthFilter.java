@@ -1,9 +1,12 @@
 package com.example.apigateway;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -11,11 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -43,7 +41,11 @@ public class JwtAuthFilter implements GlobalFilter {
     private static final List<String> WHITE_LIST_PREFIXES = List.of(
             "/swagger-ui",
             "/v3/api-docs",
+            "/story",
+            "/api/v1/users/signin",
+            "/api/v1/users/signup",
             "/ai-service/swagger-ui",
+            "/api/v1/recommendations",
             "/ai-service/v3/api-docs",
             "/analytics-service/swagger-ui",
             "/analytics-service/v3/api-docs",
@@ -97,7 +99,8 @@ public class JwtAuthFilter implements GlobalFilter {
             String token = bearerToken.substring(7);
             System.out.println(">>>> [JwtAuthFilter] Token : " + token);
 
-            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
+                    .getBody();
             String userId = extractUserId(claims);
             System.out.println(">>>> [JwtAuthFilter] claims get userId : " + userId);
 
