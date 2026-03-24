@@ -40,8 +40,13 @@ public class UserEntity {
     public void assignDifficulty(String assignedDifficulty) {
         this.assignedDifficulty = assignedDifficulty;
     }
-
-    public void increaseLevel() {
+    
+    public int increaseLevel() {
         this.currentLevel++;
+        return this.currentLevel;
+    }
+
+    public void changeLevel(int level) {
+        this.currentLevel = level;
     }
 }
