@@ -41,7 +41,8 @@ public class JwtAuthFilter implements GlobalFilter {
         "/api/v1/users/signup",
 
         "/api/v1/recommendations",
-
+        "/story",
+        
         "/user-service/swagger-ui",
         "/user-service/v3/api-docs",
         "/story-service/swagger-ui",
