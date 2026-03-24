@@ -69,7 +69,7 @@ public class UserController {
 
     }
 
-    // 소연님과 상의 후 고쳐야 함 !!!
+    // TODO: 소연님과 상의 후 고쳐야 함 !!!
     // 난이도 저장
     @PostMapping("/internal/createAssignedDifficulty")
     public ResponseEntity<?> createAssignedDifficulty(
