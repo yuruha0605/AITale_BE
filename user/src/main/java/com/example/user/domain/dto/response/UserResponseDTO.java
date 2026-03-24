@@ -1,4 +1,4 @@
-package com.example.user.domain.dto;
+package com.example.user.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +13,11 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DifficultyRequestDTO {
+public class UserResponseDTO {
 
-    private Long userSystemId;
-    private String difficulty;
+    private String email;
+    private int age;
+    private int currentLevel;
+    private String assignedDifficulty; // 학습난이도
 
 }

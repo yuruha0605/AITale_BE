@@ -1,6 +1,5 @@
-package com.example.user.domain.dto;
+package com.example.user.domain.dto.request;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,11 +13,9 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDTO {
+public class DifficultyRequestDTO {
 
-    private String email;
-    private int age;
-    private int currentLevel;
-    private String assignedDifficulty; // 학습난이도
+    private Long userSystemId;
+    private String difficulty;
 
 }

@@ -1,28 +1,25 @@
 package com.example.user.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import com.example.user.domain.dto.LoginRequestDTO;
-import com.example.user.domain.dto.UserInterestRequestDTO;
-import com.example.user.domain.dto.UserRequestDTO;
-import com.example.user.domain.dto.UserResponseDTO;
+import com.example.user.domain.dto.request.LoginRequestDTO;
+import com.example.user.domain.dto.request.UserInterestRequestDTO;
+import com.example.user.domain.dto.request.UserRequestDTO;
+import com.example.user.domain.dto.response.UserResponseDTO;
 import com.example.user.domain.entity.UserEntity;
 import com.example.user.domain.entity.UserInterestEntity;
 import com.example.user.provider.JwtProvider;
 import com.example.user.repository.UserInterestRepository;
 import com.example.user.repository.UserRepository;
-
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
@@ -39,11 +36,11 @@ public class UserService {
         // 1. DTO를 Entity로 변환 (비밀번호 암호화 포함)
 
         UserEntity userEntity = UserEntity.builder()
-                .email(userRequestDTO.getEmail())
-                .password(passwordEncoder.encode(userRequestDTO.getPassword())) // 암호화 후 주입
-                .age(userRequestDTO.getAge())
-                .currentLevel(1)
-                .build();
+            .email(userRequestDTO.getEmail())
+            .password(passwordEncoder.encode(userRequestDTO.getPassword())) // 암호화 후 주입
+            .age(userRequestDTO.getAge())
+            .currentLevel(1)
+            .build();
 
         // 2. DB 저장 (save 메서드는 Entity를 인자로 받습니다)
         UserEntity savedUser = userRepository.save(userEntity);
@@ -51,8 +48,8 @@ public class UserService {
         // 3. ResponseDTO 생성 및 반환
         // 생성자나 빌더를 사용하여 필요한 정보를 채워줍니다.
         return UserResponseDTO.builder()
-                .email(savedUser.getEmail())
-                .build();
+            .email(savedUser.getEmail())
+            .build();
     }
 
     // redis
@@ -68,7 +65,7 @@ public class UserService {
 
         // hashing version
         UserEntity entity = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new RuntimeException("Not Found!!"));
 
         // (plain vs encoded)
         if (!passwordEncoder.matches(request.getPassword(), entity.getPassword())) {
@@ -81,7 +78,7 @@ public class UserService {
 
         System.out.println(">>>> 3. user service RT토큰 Redis 저장");
         redisTemplate.opsForValue()
-                .set("RT:" + entity.getUserSystemId(), rt, REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
+            .set("RT:" + entity.getUserSystemId(), rt, REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
 
         map.put("access", at);
         map.put("refresh", rt);
@@ -93,7 +90,7 @@ public class UserService {
     public String createAssignedDifficulty(Long userSystemId, String difficulty) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-                .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new RuntimeException("Not Found!!"));
         userEntity.setAssignedDifficulty(difficulty);
 
         userRepository.save(userEntity);
@@ -105,7 +102,7 @@ public class UserService {
     public String getEmail(Long userSystemId) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-                .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new RuntimeException("Not Found!!"));
         return userEntity.getEmail();
 
     }
@@ -114,14 +111,14 @@ public class UserService {
     public UserResponseDTO getProfile(Long userSystemId) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-                .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new RuntimeException("Not Found!!"));
 
         return UserResponseDTO.builder()
-                .email(userEntity.getEmail())
-                .age(userEntity.getAge())
-                .currentLevel(userEntity.getCurrentLevel())
-                .assignedDifficulty(userEntity.getAssignedDifficulty())
-                .build();
+            .email(userEntity.getEmail())
+            .age(userEntity.getAge())
+            .currentLevel(userEntity.getCurrentLevel())
+            .assignedDifficulty(userEntity.getAssignedDifficulty())
+            .build();
 
     }
 
@@ -129,14 +126,14 @@ public class UserService {
     public List<Long> createInterest(Long userSystemId, UserInterestRequestDTO requestDTO) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-                .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new RuntimeException("Not Found!!"));
 
         List<Long> interestResponseList = new ArrayList<>();
         for (Long interest : requestDTO.getInterests()) {
             UserInterestEntity entity = UserInterestEntity.builder()
-                    .userSystemId(userEntity.getUserSystemId())
-                    .interestId(interest)
-                    .build();
+                .userSystemId(userEntity.getUserSystemId())
+                .interestId(interest)
+                .build();
 
             UserInterestEntity savedInterest = userInterestRepository.save(entity);
             interestResponseList.add(savedInterest.getInterestId());
@@ -166,9 +163,9 @@ public class UserService {
     public int increaseUserLevel(Long userSystemId) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-                .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new RuntimeException("Not Found!!"));
         int updateLevel = userEntity.getCurrentLevel() + 1;
-        userEntity.setCurrentLevel(updateLevel);
+        userEntity.changeLevel(updateLevel);
 
         return updateLevel;
 

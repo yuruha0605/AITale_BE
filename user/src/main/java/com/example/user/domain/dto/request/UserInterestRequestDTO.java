@@ -1,5 +1,6 @@
-package com.example.user.domain.dto;
+package com.example.user.domain.dto.request;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,8 +14,8 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequestDTO {
+public class UserInterestRequestDTO {
 
-    private String email ; 
-    private String password; 
+    private List<Long> interests;
+
 }

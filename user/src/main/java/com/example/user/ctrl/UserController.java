@@ -1,8 +1,16 @@
 package com.example.user.ctrl;
 
+import com.example.user.domain.dto.request.DifficultyRequestDTO;
+import com.example.user.domain.dto.request.LoginRequestDTO;
+import com.example.user.domain.dto.request.UserInterestRequestDTO;
+import com.example.user.domain.dto.request.UserRequestDTO;
+import com.example.user.domain.dto.response.UserResponseDTO;
+import com.example.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Map;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,17 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.user.domain.dto.DifficultyRequestDTO;
-import com.example.user.domain.dto.LoginRequestDTO;
-import com.example.user.domain.dto.UserInterestRequestDTO;
-import com.example.user.domain.dto.UserRequestDTO;
-import com.example.user.domain.dto.UserResponseDTO;
-import com.example.user.service.UserService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 
 @Tag(name = "User-Service", description = "유저 관련 API")
 @RestController
@@ -39,10 +36,11 @@ public class UserController {
         System.out.println(" >>> user ctrl path : /signUp");
         System.out.println(" >>> params : " + userRequestDTO);
 
-        UserResponseDTO userResponseDTO = userService.signUp(userRequestDTO); // userResponseDTO : email , password반환
+        UserResponseDTO userResponseDTO = userService.signUp(
+            userRequestDTO); // userResponseDTO : email , password반환
 
         return ResponseEntity
-                .status(HttpStatus.OK).body(userResponseDTO);
+            .status(HttpStatus.OK).body(userResponseDTO);
 
     }
 
@@ -65,16 +63,17 @@ public class UserController {
         headers.add("Access-Control-Expose-Headers", "Authorization, Refresh-Token");
 
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .headers(headers)
-                .body((String) (map.get("access")));
+            .status(HttpStatus.OK)
+            .headers(headers)
+            .body((String) (map.get("access")));
 
     }
 
     // 소연님과 상의 후 고쳐야 함 !!!
     // 난이도 저장
     @PostMapping("/internal/createAssignedDifficulty")
-    public ResponseEntity<?> createAssignedDifficulty(@RequestBody DifficultyRequestDTO difficultyRequestDTO) {
+    public ResponseEntity<?> createAssignedDifficulty(
+        @RequestBody DifficultyRequestDTO difficultyRequestDTO) {
 
         System.out.println(" >>> user ctrl path : /createAssignedDifficulty");
 
@@ -82,8 +81,8 @@ public class UserController {
         Long userSystemId = difficultyRequestDTO.getUserSystemId();
         userService.createAssignedDifficulty(userSystemId, difficulty);
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(difficulty);
+            .status(HttpStatus.OK)
+            .body(difficulty);
 
     }
 
@@ -103,8 +102,8 @@ public class UserController {
         System.out.println(" >>> user ctrl path : /getProfile");
         UserResponseDTO userResponseDTO = userService.getProfile(userSystemId);
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userResponseDTO);
+            .status(HttpStatus.OK)
+            .body(userResponseDTO);
 
     }
 
@@ -112,14 +111,14 @@ public class UserController {
     // 입력값 : json배열. 예시 {"interests": [1,2,3]} / 반환값 : List []
     @PostMapping("/createInterest")
     public ResponseEntity<?> createInterest(@RequestHeader("X-User-Id") Long userSystemId,
-            @RequestBody UserInterestRequestDTO requestDTO) {
+        @RequestBody UserInterestRequestDTO requestDTO) {
         System.out.println(" >>> user ctrl path : /createInterest");
 
         List<Long> savedInterests = userService.createInterest(userSystemId, requestDTO);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(savedInterests);
+            .status(HttpStatus.OK)
+            .body(savedInterests);
     }
 
     // 관심사 불러오기
@@ -129,8 +128,8 @@ public class UserController {
         List<Long> interests = userService.getInterests(userSystemId);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(interests);
+            .status(HttpStatus.OK)
+            .body(interests);
 
     }
 
@@ -141,8 +140,8 @@ public class UserController {
 
         int updateLevel = userService.increaseUserLevel(userSystemId);
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(updateLevel);
+            .status(HttpStatus.OK)
+            .body(updateLevel);
 
     }
 }

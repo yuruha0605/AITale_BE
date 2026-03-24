@@ -1,4 +1,4 @@
-package com.example.user.domain.dto;
+package com.example.user.domain.dto.request;
 
 import com.example.user.domain.entity.UserEntity;
 import lombok.AllArgsConstructor;
@@ -16,16 +16,16 @@ import lombok.ToString;
 @AllArgsConstructor
 public class UserRequestDTO {
 
-    private String email ; 
-    private String password; 
-    private int age ;
+    private String email;
+    private String password;
+    private int age;
 
     // factory method pattern (dto -> entity) : JPA 작업가능
     public UserEntity toEntity() {
         return UserEntity.builder()
-                .email(this.email)
-                .password(this.password)
-                .age(this.age)
-                .build() ;
+            .email(this.email)
+            .password(this.password)
+            .age(this.age)
+            .build();
     }
 }
