@@ -21,7 +21,6 @@ public class JwtProvider {
     private final long REFRESH_TOKEN_EXPIRY = 1000L * 60 * 60 * 24 * 7;
 
     private Key getStringKey() {
-        System.out.println(">>>> Provider jwt secret : " + secret);
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
