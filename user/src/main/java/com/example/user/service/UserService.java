@@ -91,7 +91,7 @@ public class UserService {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
             .orElseThrow(() -> new RuntimeException("Not Found!!"));
-        userEntity.setAssignedDifficulty(difficulty);
+        userEntity.assignDifficulty(difficulty);
 
         userRepository.save(userEntity);
         return difficulty;
