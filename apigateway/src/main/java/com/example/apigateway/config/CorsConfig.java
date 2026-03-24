@@ -1,27 +1,14 @@
 package com.example.apigateway.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsWebFilter;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-
+/**
+ * CORS 설정은 application.yml의 spring.cloud.gateway.globalcors에서 관리합니다.
+ * 이 클래스는 사용하지 않습니다.
+ */
 @Configuration
 public class CorsConfig {
-
-    @Bean
-    public CorsWebFilter corsWebFilter() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
-        corsConfiguration.setAllowCredentials(false);
-        corsConfiguration.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-        return new CorsWebFilter(corsConfigurationSource);
-    }
+    // CORS 설정이 중복되지 않도록 이 클래스는 비활성화합니다.
+    // gateway의 globalcors 설정만 사용합니다.
 }
+
