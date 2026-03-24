@@ -7,6 +7,8 @@ import com.aitale.user.domain.dto.response.InternalUserProfileResponse;
 import com.aitale.user.domain.dto.response.UserResponseDTO;
 import com.aitale.user.domain.entity.UserEntity;
 import com.aitale.user.domain.entity.UserInterestEntity;
+import com.aitale.user.exception.InvalidCredentialsException;
+import com.aitale.user.exception.UserNotFoundException;
 import com.aitale.user.provider.JwtProvider;
 import com.aitale.user.repository.UserInterestRepository;
 import com.aitale.user.repository.UserRepository;
@@ -41,6 +43,7 @@ public class UserService {
             .password(passwordEncoder.encode(userRequestDTO.getPassword())) // 암호화 후 주입
             .age(userRequestDTO.getAge())
             .currentLevel(1)
+            .profilePublic(true)
             .build();
 
         // 2. DB 저장 (save 메서드는 Entity를 인자로 받습니다)
@@ -69,11 +72,11 @@ public class UserService {
 
         // hashing version
         UserEntity entity = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new UserNotFoundException("User not found with email: " + request.getEmail()));
 
         // (plain vs encoded)
         if (!passwordEncoder.matches(request.getPassword(), entity.getPassword())) {
-            throw new RuntimeException("Password Not Matched");
+            throw new InvalidCredentialsException("Invalid password");
         }
 
         System.out.println(">>>> 2. user service 토큰 생성");
@@ -94,7 +97,7 @@ public class UserService {
     public String createAssignedDifficulty(Long userSystemId, String difficulty) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-            .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userSystemId));
         userEntity.assignDifficulty(difficulty);
 
         userRepository.save(userEntity);
@@ -106,7 +109,7 @@ public class UserService {
     public String getEmail(Long userSystemId) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-            .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userSystemId));
         return userEntity.getEmail();
 
     }
@@ -115,7 +118,7 @@ public class UserService {
     public UserResponseDTO getProfile(Long userSystemId) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-            .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userSystemId));
 
         return UserResponseDTO.builder()
             .email(userEntity.getEmail())
@@ -130,7 +133,7 @@ public class UserService {
     public List<Long> createInterest(Long userSystemId, UserInterestRequestDTO requestDTO) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-            .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userSystemId));
 
         List<Long> interestResponseList = new ArrayList<>();
         for (Long interest : requestDTO.getInterests()) {
@@ -152,7 +155,7 @@ public class UserService {
         List<UserInterestEntity> entities = userInterestRepository.findByUserSystemId(userSystemId);
 
         if (entities.isEmpty()) {
-            throw new RuntimeException("Not Found!!");
+            throw new UserNotFoundException("No interests found for user: " + userSystemId);
         }
 
         List<Long> interests = new ArrayList<>();
@@ -167,7 +170,7 @@ public class UserService {
     public int increaseUserLevel(Long userSystemId) {
 
         UserEntity userEntity = userRepository.findById(userSystemId)
-            .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userSystemId));
         int updateLevel = userEntity.getCurrentLevel() + 1;
         userEntity.changeLevel(updateLevel);
 
@@ -177,7 +180,7 @@ public class UserService {
 
     public InternalUserProfileResponse getInternalProfile(Long userSystemId) {
         UserEntity userEntity = userRepository.findById(userSystemId)
-            .orElseThrow(() -> new RuntimeException("Not Found!!"));
+            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userSystemId));
 
         List<String> interests = new ArrayList<>();
         List<UserInterestEntity> entities = userInterestRepository.findByUserSystemId(userSystemId);
