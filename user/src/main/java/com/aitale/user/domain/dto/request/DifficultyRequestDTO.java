@@ -15,7 +15,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DifficultyRequestDTO {
 
-    private Long userSystemId;
+    // user id는 URL에서 받으므로 제거
+//    private Long userSystemId;
     private String difficulty;
 
 }
