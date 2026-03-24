@@ -31,11 +31,10 @@ public class RecommendationService {
             recommendationCommandService.generateRecommendations(userId, size);
         }
 
-        // TODO: 테스트 성공 시 주석 해제
-//        List<Recommendation> cached = recommendationCacheService.get(userId);
-//        if (!cached.isEmpty()) {
-//            return toListResponse(userId, cached);
-//        }
+        List<Recommendation> cached = recommendationCacheService.get(userId);
+        if (!cached.isEmpty()) {
+            return toListResponse(userId, cached);
+        }
 
         List<Recommendation> recommendations = recommendationRepository.findByUserIdOrderByRankOrderAsc(
             userId);

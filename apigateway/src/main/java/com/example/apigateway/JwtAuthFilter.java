@@ -1,9 +1,12 @@
 package com.example.apigateway;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -11,11 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -27,32 +25,39 @@ public class JwtAuthFilter implements GlobalFilter {
 
     // WHITE LIST
     private static final List<String> WHITE_LIST_PATHS = List.of(
-            "/user/signIn",
-            "/user/signUp",
-            "/user-service/user/signIn",
-            "/user-service/user/signUp",
-            "/health/alive",
-            "/actuator/health",
-            "/product/list");
+        "/user/signIn",
+        "/user/signUp",
+        "/user-service/user/signIn",
+        "/user-service/user/signUp",
+        "/health/alive",
+        "/actuator/health",
+        "/product/list");
 
     private static final List<String> WHITE_LIST_PREFIXES = List.of(
-            "/swagger-ui",
-            "/v3/api-docs",
-            "/ai-service/swagger-ui",
-            "/ai-service/v3/api-docs",
-            "/analytics-service/swagger-ui",
-            "/analytics-service/v3/api-docs",
-            "/gamification-service/swagger-ui",
-            "/gamification-service/v3/api-docs",
-            "/learning-service/swagger-ui",
-            "/learning-service/v3/api-docs",
-            "/recommendation-service/swagger-ui",
-            "/recommendation-service/v3/api-docs",
-            "/story-service/swagger-ui",
-            "/story-service/v3/api-docs",
-            "/user-service/swagger-ui",
-            "/user-service/v3/api-docs",
-            "/user-service/user/signIn");
+        "/swagger-ui",
+        "/v3/api-docs",
+
+        "/api/v1/users/signin",
+        "/api/v1/users/signup",
+
+        "/api/v1/recommendations",
+        "/story",
+        
+        "/user-service/swagger-ui",
+        "/user-service/v3/api-docs",
+        "/story-service/swagger-ui",
+        "/story-service/v3/api-docs",
+        "/learning-service/swagger-ui",
+        "/learning-service/v3/api-docs",
+        "/recommendation-service/swagger-ui",
+        "/recommendation-service/v3/api-docs",
+        "/analytics-service/swagger-ui",
+        "/analytics-service/v3/api-docs",
+        "/gamification-service/swagger-ui",
+        "/gamification-service/v3/api-docs",
+        "/ai-service/swagger-ui",
+        "/ai-service/v3/api-docs"
+    );
 
     @PostConstruct
     private void init() {
@@ -90,7 +95,8 @@ public class JwtAuthFilter implements GlobalFilter {
             String token = bearerToken.substring(7);
             System.out.println(">>>> [JwtAuthFilter] Token : " + token);
 
-            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
+                .getBody();
             String userId = extractUserId(claims);
             System.out.println(">>>> [JwtAuthFilter] claims get userId : " + userId);
 
@@ -98,7 +104,7 @@ public class JwtAuthFilter implements GlobalFilter {
             // X custom header 라는 것을 의미하는 관례...
             ServerWebExchange modifyExchange = exchange.mutate().request(
                     builder -> builder.header("X-User-Id", userId))
-                    .build();
+                .build();
             return chain.filter(modifyExchange);
         } catch (Exception e) {
             e.printStackTrace();

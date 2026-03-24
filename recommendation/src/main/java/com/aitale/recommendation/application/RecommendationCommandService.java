@@ -8,6 +8,7 @@ import com.aitale.recommendation.dto.ai.AiRecommendedStory;
 import com.aitale.recommendation.dto.request.InternalRecommendationBuildRequest;
 import com.aitale.recommendation.dto.response.RecommendationGenerateResponse;
 import com.aitale.recommendation.dto.response.StoryCandidateResponse;
+import com.aitale.recommendation.dto.response.StoryCandidatesResponse;
 import com.aitale.recommendation.dto.response.UserProfileResponse;
 import com.aitale.recommendation.exception.RecommendationErrorCode;
 import com.aitale.recommendation.exception.RecommendationException;
@@ -71,14 +72,7 @@ public class RecommendationCommandService {
     }
 
     public void deleteRecommendationCache(Long userId) {
-//        recommendationCacheService.evict(userId);
-//        recommendationRepository.deleteByUserId(userId);
-        // TODO: 해결 시 삭제
-        try {
-            recommendationCacheService.evict(userId);
-        } catch (Exception e) {
-            // ignore
-        }
+        recommendationCacheService.evict(userId);
         recommendationRepository.deleteByUserId(userId);
     }
 
@@ -87,31 +81,17 @@ public class RecommendationCommandService {
         int size,
         List<Long> excludeStoryIds
     ) {
-//        StoryCandidatesResponse candidateResponse =
-//            storyServiceClient.getStoryCandidates(userProfile.assignedDifficulty(), size * 3);
-//
-//        if (candidateResponse == null
-//            || candidateResponse.stories() == null
-//            || candidateResponse.stories().isEmpty()) {
-//            saveFailedLog(userProfile);
-//            throw new RecommendationException(RecommendationErrorCode.STORY_CANDIDATE_NOT_FOUND);
-//        }
-//
-//        List<StoryCandidateResponse> filteredStories = candidateResponse.stories().stream()
-//            .filter(story -> !excludeStoryIds.contains(story.storyId()))
-//            .toList();
-//
-//        if (filteredStories.isEmpty()) {
-//            saveFailedLog(userProfile);
-//            throw new RecommendationException(RecommendationErrorCode.STORY_CANDIDATE_NOT_FOUND);
-//        }
+        StoryCandidatesResponse candidateResponse =
+            storyServiceClient.getStoryCandidates(userProfile.assignedDifficulty(), size * 3);
 
-        // TODO: 테스트용 코드
-        List<StoryCandidateResponse> filteredStories = List.of(
-                new StoryCandidateResponse(201L, "토끼와 해님", "동물", 1200),
-                new StoryCandidateResponse(202L, "숲속 친구들의 약속", "자연", 1500),
-                new StoryCandidateResponse(203L, "곰의 모험", "모험", 1300)
-            ).stream()
+        if (candidateResponse == null
+            || candidateResponse.stories() == null
+            || candidateResponse.stories().isEmpty()) {
+            saveFailedLog(userProfile);
+            throw new RecommendationException(RecommendationErrorCode.STORY_CANDIDATE_NOT_FOUND);
+        }
+
+        List<StoryCandidateResponse> filteredStories = candidateResponse.stories().stream()
             .filter(story -> !excludeStoryIds.contains(story.storyId()))
             .toList();
 
@@ -119,7 +99,6 @@ public class RecommendationCommandService {
             saveFailedLog(userProfile);
             throw new RecommendationException(RecommendationErrorCode.STORY_CANDIDATE_NOT_FOUND);
         }
-        // 여기까지
 
         log.info("추천 생성 시작 - userId={}, size={}, difficulty={}, interests={}",
             userProfile.userId(),
@@ -247,16 +226,5 @@ public class RecommendationCommandService {
             return "";
         }
         return String.join(",", interests);
-    }
-
-    // TODO: story 구현 완료 및 테스트 성공 시 삭제
-    private List<StoryCandidateResponse> getMockStories() {
-        return List.of(
-            new StoryCandidateResponse(201L, "토끼와 해님", "동물", 1200),
-            new StoryCandidateResponse(202L, "숲속 친구들의 약속", "자연", 1500),
-            new StoryCandidateResponse(203L, "곰의 모험", "모험", 1300),
-            new StoryCandidateResponse(204L, "바다를 건넌 새", "자연", 1100),
-            new StoryCandidateResponse(205L, "용감한 다람쥐", "모험", 1400)
-        );
     }
 }
