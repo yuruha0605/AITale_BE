@@ -27,6 +27,7 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "user_password", nullable = false)
     private String password;
 
     private int age;
@@ -36,6 +37,9 @@ public class UserEntity {
 
     @Column(name = "assigned_difficulty")
     private String assignedDifficulty; // 학습 난이도
+
+    @Column(name = "profile_public", nullable = false)
+    private boolean profilePublic;
 
     public void assignDifficulty(String assignedDifficulty) {
         this.assignedDifficulty = assignedDifficulty;
