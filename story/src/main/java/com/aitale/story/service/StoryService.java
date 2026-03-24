@@ -35,6 +35,7 @@ public class StoryService {
     private final StoryRepository storyRepository;
     private final PublicStoryApiClient publicStoryApiClient;
     private final StoryAiClient storyAiClient;
+    private final ImageBase64Service imageBase64Service;
 
     public GenreResponseDTO createGenre(GenreCreateRequestDTO request) {
         GenreEntity saved = genreRepository.save(GenreEntity.builder()
@@ -116,7 +117,11 @@ public class StoryService {
             .orElseThrow(() -> new IllegalArgumentException("스토리를 찾을 수 없습니다. storyId=" + storyId));
 
         AiImageResult aiImageResult = storyAiClient.generateStoryImage(story, request.style());
-        story.updateAiImageUrl(aiImageResult.imageUrl());
+
+        String base64DataUri =
+            imageBase64Service.convertImageUrlToDataUri(aiImageResult.imageUrl());
+
+        story.updateAiImageUrl(base64DataUri);
 
         return new StoryImageGenerateResponse(
             story.getStoryId(),
