@@ -5,6 +5,7 @@ import com.aitale.user.domain.dto.request.LoginRequestDTO;
 import com.aitale.user.domain.dto.request.UserInterestRequestDTO;
 import com.aitale.user.domain.dto.request.UserRequestDTO;
 import com.aitale.user.domain.dto.response.UserResponseDTO;
+import com.aitale.user.provider.JwtProvider;
 import com.aitale.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,32 +25,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "User-Service", description = "유저 관련 API")
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    private final JwtProvider jwtProvider;
 
     @Operation(summary = "회원가입", description = "새로운 유저 회원가입")
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserRequestDTO userRequestDTO) {
 
-        System.out.println(" >>> user ctrl path : /signUp");
+        System.out.println(" >>> user ctrl path : /signup");
         System.out.println(" >>> params : " + userRequestDTO);
 
-        UserResponseDTO userResponseDTO = userService.signUp(
-            userRequestDTO); // userResponseDTO : email , password반환
+        UserResponseDTO userResponseDTO = userService.signUp(userRequestDTO);
 
         return ResponseEntity
-            .status(HttpStatus.OK).body(userResponseDTO);
-
+            .status(HttpStatus.OK)
+            .body(userResponseDTO);
     }
 
     @Operation(summary = "로그인", description = "아이디와 비번으로 로그인")
-    @PostMapping("/signIn")
+    @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody LoginRequestDTO request) {
 
-        System.out.println(" >>> user ctrl path : /signIn");
+        System.out.println(" >>> user ctrl path : /signin");
         System.out.println(" >>> params : " + request);
         // LoginRequestDTO request = LoginRequestDTO.builder()
         // .email(userRequestDTO.getEmail())
@@ -58,14 +60,17 @@ public class UserController {
         Map<String, Object> map = userService.signIn(request);
         HttpHeaders headers = new HttpHeaders();
 
-        headers.add("Authorization", "Bearer " + (String) (map.get("access"))); // 액세스 토큰
-        headers.add("Refresh-Token", (String) (map.get("refresh")));
+        headers.add("Authorization", "Bearer " + (String) map.get("access"));
+        headers.add("Refresh-Token", (String) map.get("refresh"));
         headers.add("Access-Control-Expose-Headers", "Authorization, Refresh-Token");
 
         return ResponseEntity
             .status(HttpStatus.OK)
             .headers(headers)
-            .body((String) (map.get("access")));
+            .body(Map.of(
+                "accessToken", map.get("access"),
+                "refreshToken", map.get("refresh")
+            ));
 
     }
 
@@ -96,23 +101,27 @@ public class UserController {
     }
 
     // 프로필 (이메일, 나이, 레벨, 난이도) 불러오기
-    @GetMapping("/getProfile")
-    public ResponseEntity<?> getProfile(@RequestHeader("X-User-Id") Long userSystemId) {
+    @GetMapping("/me/profile")
+    public ResponseEntity<?> getProfile(@RequestHeader("Authorization") String token) {
 
-        System.out.println(" >>> user ctrl path : /getProfile");
+        System.out.println(" >>> user ctrl path : /me/profile");
+        Long userSystemId = jwtProvider.getUserIdFromToken(token);
+
         UserResponseDTO userResponseDTO = userService.getProfile(userSystemId);
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(userResponseDTO);
-
     }
 
     // 관심사 설정 (관심사는 순위없음)
     // 입력값 : json배열. 예시 {"interests": [1,2,3]} / 반환값 : List []
-    @PostMapping("/createInterest")
-    public ResponseEntity<?> createInterest(@RequestHeader("X-User-Id") Long userSystemId,
+    @PutMapping("/me/interests")
+    public ResponseEntity<?> createInterest(
+        @RequestHeader("Authorization") String token,
         @RequestBody UserInterestRequestDTO requestDTO) {
-        System.out.println(" >>> user ctrl path : /createInterest");
+
+        System.out.println(" >>> user ctrl path : /me/interests");
+        Long userSystemId = jwtProvider.getUserIdFromToken(token);
 
         List<Long> savedInterests = userService.createInterest(userSystemId, requestDTO);
 
@@ -122,26 +131,15 @@ public class UserController {
     }
 
     // 관심사 불러오기
-    @PostMapping("/getInterests")
-    public ResponseEntity<?> getInterests(@RequestHeader("X-User-Id") Long userSystemId) {
-        System.out.println(" >>> user ctrl path : /user/getInterests");
+    @GetMapping("/me/interests")
+    public ResponseEntity<?> getInterests(@RequestHeader("Authorization") String token) {
+        System.out.println(" >>> user ctrl path : /me/interests");
+        Long userSystemId = jwtProvider.getUserIdFromToken(token);
+
         List<Long> interests = userService.getInterests(userSystemId);
 
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(interests);
-
-    }
-
-    // 사용자 레벨 증가
-    // 경험치(EXP)가 쌓이면 사용자 레벨이 올라감. --> openFeign방식으로 한다고 가정함.
-    @PostMapping("/internal/increaseLevelUp")
-    public ResponseEntity<?> updateLevel(@RequestBody Long userSystemId) {
-
-        int updateLevel = userService.increaseUserLevel(userSystemId);
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(updateLevel);
-
     }
 }
