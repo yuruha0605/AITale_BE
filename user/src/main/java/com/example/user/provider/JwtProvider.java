@@ -73,7 +73,7 @@ public class JwtProvider {
     // Bearer xxxxxxx
     // 메서드명을 목적에 맞게 변경: getUserEmail... -> getUserId...
     public Long getUserIdFromToken(String token) {
-        System.out.println(">>>> Provider getUserIdFromToken token : " + token);
+        System.out.println(">>>> Provider getUserIdFromToken");
 
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
