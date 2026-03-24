@@ -1,7 +1,7 @@
 package com.aitale.user.ctrl;
 
 import com.aitale.user.domain.dto.request.DifficultyRequestDTO;
-import com.aitale.user.domain.dto.response.UserResponseDTO;
+import com.aitale.user.domain.dto.response.InternalUserProfileResponse;
 import com.aitale.user.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -33,14 +33,15 @@ public class InternalUserController {
 
     // recommendation 등 내부 서비스용 프로필 조회
     @GetMapping("/{userSystemId}/profile")
-    public ResponseEntity<?> getProfile(@PathVariable Long userSystemId) {
+    public ResponseEntity<InternalUserProfileResponse> getProfile(@PathVariable Long userSystemId) {
 
         System.out.println(" >>> user ctrl path : /internal/users/{userSystemId}/profile");
-        UserResponseDTO userResponseDTO = userService.getProfile(userSystemId);
+
+        InternalUserProfileResponse response = userService.getInternalProfile(userSystemId);
 
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(userResponseDTO);
+            .body(response);
     }
 
     // 내부 서비스용 관심사 조회

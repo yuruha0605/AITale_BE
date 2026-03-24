@@ -3,6 +3,7 @@ package com.aitale.user.service;
 import com.aitale.user.domain.dto.request.LoginRequestDTO;
 import com.aitale.user.domain.dto.request.UserInterestRequestDTO;
 import com.aitale.user.domain.dto.request.UserRequestDTO;
+import com.aitale.user.domain.dto.response.InternalUserProfileResponse;
 import com.aitale.user.domain.dto.response.UserResponseDTO;
 import com.aitale.user.domain.entity.UserEntity;
 import com.aitale.user.domain.entity.UserInterestEntity;
@@ -172,6 +173,27 @@ public class UserService {
 
         return updateLevel;
 
+    }
+
+    public InternalUserProfileResponse getInternalProfile(Long userSystemId) {
+        UserEntity userEntity = userRepository.findById(userSystemId)
+            .orElseThrow(() -> new RuntimeException("Not Found!!"));
+
+        List<String> interests = new ArrayList<>();
+        List<UserInterestEntity> entities = userInterestRepository.findByUserSystemId(userSystemId);
+
+        for (UserInterestEntity entity : entities) {
+            interests.add(String.valueOf(entity.getInterestId()));
+        }
+
+        return new InternalUserProfileResponse(
+            userEntity.getUserSystemId(),
+            userEntity.getEmail(),
+            userEntity.getAge(),
+            userEntity.getCurrentLevel(),
+            userEntity.getAssignedDifficulty(),
+            interests
+        );
     }
 
 }
