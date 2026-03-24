@@ -1,6 +1,5 @@
 package com.aitale.user.ctrl;
 
-import com.aitale.user.domain.dto.request.DifficultyRequestDTO;
 import com.aitale.user.domain.dto.request.LoginRequestDTO;
 import com.aitale.user.domain.dto.request.UserInterestRequestDTO;
 import com.aitale.user.domain.dto.request.UserRequestDTO;
@@ -52,10 +51,6 @@ public class UserController {
 
         System.out.println(" >>> user ctrl path : /signin");
         System.out.println(" >>> params : " + request);
-        // LoginRequestDTO request = LoginRequestDTO.builder()
-        // .email(userRequestDTO.getEmail())
-        // .password(userRequestDTO.getPassword())
-        // .build() ;
 
         Map<String, Object> map = userService.signIn(request);
         HttpHeaders headers = new HttpHeaders();
@@ -71,33 +66,6 @@ public class UserController {
                 "accessToken", map.get("access"),
                 "refreshToken", map.get("refresh")
             ));
-
-    }
-
-    // TODO: 소연님과 상의 후 고쳐야 함 !!!
-    // 난이도 저장
-    @PostMapping("/internal/createAssignedDifficulty")
-    public ResponseEntity<?> createAssignedDifficulty(
-        @RequestBody DifficultyRequestDTO difficultyRequestDTO) {
-
-        System.out.println(" >>> user ctrl path : /createAssignedDifficulty");
-
-        String difficulty = difficultyRequestDTO.getDifficulty();
-        Long userSystemId = difficultyRequestDTO.getUserSystemId();
-        userService.createAssignedDifficulty(userSystemId, difficulty);
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(difficulty);
-
-    }
-
-    // 프로필(이메일) 불러오기
-    @GetMapping("/getEmail")
-    public ResponseEntity<?> getEmail(@RequestHeader("X-User-Id") Long userSystemId) {
-
-        String email = userService.getEmail(userSystemId);
-
-        return ResponseEntity.ok(Map.of("email", email));
     }
 
     // 프로필 (이메일, 나이, 레벨, 난이도) 불러오기
