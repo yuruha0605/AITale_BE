@@ -7,6 +7,14 @@ spring:
     config:
       fail-fast: true
 
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://eureka-server:8761/eureka/}
+
 springdoc:
   api-docs:
     path: /v3/api-docs
