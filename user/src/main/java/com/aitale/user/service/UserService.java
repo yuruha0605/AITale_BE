@@ -49,6 +49,9 @@ public class UserService {
         // 생성자나 빌더를 사용하여 필요한 정보를 채워줍니다.
         return UserResponseDTO.builder()
             .email(savedUser.getEmail())
+            .age(savedUser.getAge())
+            .currentLevel(savedUser.getCurrentLevel())
+            .assignedDifficulty(savedUser.getAssignedDifficulty())
             .build();
     }
 
