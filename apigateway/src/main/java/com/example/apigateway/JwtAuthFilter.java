@@ -31,6 +31,11 @@ public class JwtAuthFilter implements GlobalFilter {
             "/user/signUp",
             "/user-service/user/signIn",
             "/user-service/user/signUp",
+            "/user-service/api/v1/users/signin",
+            "/user-service/api/v1/users/signup",
+            // StripPrefix=1 후의 경로들 (API Gateway 필터가 /user-service 제거 후)
+            "/api/v1/users/signin",
+            "/api/v1/users/signup",
             "/health/alive",
             "/actuator/health",
             "/product/list");
@@ -52,7 +57,9 @@ public class JwtAuthFilter implements GlobalFilter {
             "/story-service/v3/api-docs",
             "/user-service/swagger-ui",
             "/user-service/v3/api-docs",
-            "/user-service/user/signIn");
+            "/user-service/user/signIn",
+            "/user-service/oauth2/authorization",
+            "/user-service/login/oauth2");
 
     @PostConstruct
     private void init() {
