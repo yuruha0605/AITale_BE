@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,7 +43,8 @@ public class StoryEntity {
     @Column(name = "char_count")
     private Integer charCount;
 
-    @Column(name = "ai_image_url", length = 1000)
+    @Lob
+    @Column(name = "ai_image_url", columnDefinition = "LONGTEXT")
     private String aiImageUrl;
 
     @Column(name = "source_url", length = 1000)
