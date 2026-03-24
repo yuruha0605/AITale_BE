@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DailyScoreStatRepository extends JpaRepository<DailyScoreStat, Long> {
 
-  List<DailyScoreStat> findByUserIdOrderByStatDateAsc(Long userId);
+    List<DailyScoreStat> findByUserIdOrderByStatDateAsc(Long userId);
 
-  Optional<DailyScoreStat> findByUserIdAndStatDate(Long userId, LocalDate statDate);
+    Optional<DailyScoreStat> findByUserIdAndStatDate(Long userId, LocalDate statDate);
+
+    List<DailyScoreStat> findByUserIdAndStatDateBetweenOrderByStatDateAsc(
+        Long userId, LocalDate from, LocalDate to);
 }
