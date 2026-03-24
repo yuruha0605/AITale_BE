@@ -13,10 +13,13 @@ import com.aitale.story.domain.dto.ai.AiImageResult;
 import com.aitale.story.domain.dto.ai.AiStoryResult;
 import com.aitale.story.domain.dto.request.StoryGenerateRequest;
 import com.aitale.story.domain.dto.request.StoryImageGenerateRequest;
+import com.aitale.story.domain.dto.response.StoryCandidateResponse;
+import com.aitale.story.domain.dto.response.StoryCandidatesResponse;
 import com.aitale.story.domain.dto.response.StoryGenerateResponse;
 import com.aitale.story.domain.dto.response.StoryImageGenerateResponse;
 import com.aitale.story.domain.entity.GenreEntity;
 import com.aitale.story.domain.entity.StoryEntity;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -226,5 +229,36 @@ public class StoryService {
             .sourceUrl(story.getSourceUrl())
             .originThumbUrl(story.getOriginThumbUrl())
             .build();
+    }
+
+    @Transactional(readOnly = true)
+    public StoryCandidatesResponse getStoryCandidates(String difficulty, Integer size) {
+        int candidateSize = (size == null || size < 1) ? 10 : size;
+
+        List<StoryEntity> stories = storyRepository.findAll().stream()
+            .sorted(Comparator.comparing(StoryEntity::getStoryId))
+            .limit(candidateSize)
+            .toList();
+
+        List<StoryCandidateResponse> items = stories.stream()
+            .map(story -> new StoryCandidateResponse(
+                story.getStoryId(),
+                story.getTitle(),
+                resolveGenreName(story.getGenreId()),
+                story.getCharCount()
+            ))
+            .toList();
+
+        return new StoryCandidatesResponse(items);
+    }
+
+    private String resolveGenreName(Long genreId) {
+        if (genreId == null) {
+            return "미분류";
+        }
+
+        return genreRepository.findById(genreId)
+            .map(GenreEntity::getGenreName)
+            .orElse("미분류");
     }
 }
