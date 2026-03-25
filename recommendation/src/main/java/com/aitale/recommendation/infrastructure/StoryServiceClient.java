@@ -5,12 +5,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "story-service", url = "${service.story.url}")
+@FeignClient(name = "story-service", url = "${STORY_SERVICE_URL:${service.story.url:http://host.docker.internal:8082}}")
 public interface StoryServiceClient {
 
     @GetMapping("/internal/stories")
     StoryCandidatesResponse getStoryCandidates(
-        @RequestParam(required = false) String difficulty,
-        @RequestParam(required = false) Integer size
-    );
+            @RequestParam(required = false) String difficulty,
+            @RequestParam(required = false) Integer size);
 }

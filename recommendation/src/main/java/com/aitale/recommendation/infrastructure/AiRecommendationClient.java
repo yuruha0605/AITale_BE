@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "ai-service", url = "${service.ai.url}")
+@FeignClient(name = "ai-service", url = "${AI_SERVICE_URL:${ai.service.url:${service.ai.url:http://host.docker.internal:9000}}}")
 public interface AiRecommendationClient {
 
     @PostMapping("/internal/recommendations")
